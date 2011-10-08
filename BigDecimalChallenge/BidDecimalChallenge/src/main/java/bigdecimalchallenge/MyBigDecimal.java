@@ -75,4 +75,9 @@ public interface MyBigDecimal {
 	 * @return new big decimal with the given value
 	 */
 	public MyBigDecimal fromNumber(Number value);
+	
+	/**
+	 * @return the value of this big decimal as number.
+	 */
+	public Number toNumber() throws NotANumberException;
 }

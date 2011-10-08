@@ -42,6 +42,7 @@ public class PerhabBigDecimal extends AbstractMyBigDecimal {
 	}
 	
 	public MyBigDecimal add(MyBigDecimal value) {
+		
 		throw new RuntimeException("Not yet implemented");
 	}
 	
@@ -73,7 +74,18 @@ public class PerhabBigDecimal extends AbstractMyBigDecimal {
 		}
 		throw new RuntimeException("Not yet implemented");
 	}
+	
+	public Number toNumber(){
+		if(data.floatingPointPosition == 0) {
+			
+		}
+		throw new RuntimeException("Not yet implemented");
+	}
 
+	
+	private PerhabBigDecimalValue getData() {
+		return data;
+	}
 
 
 
