@@ -6,7 +6,7 @@ import bigdecimalchallenge.MyBigDecimalTest;
 public class PerhabBigDecimalTest extends MyBigDecimalTest {
 
 	@Override
-	public Class<MyBigDecimal> getImplementation() {
+	public Class<? extends MyBigDecimal> getImplementation() {
 		return PerhabBigDecimal.class;
 	}
 
