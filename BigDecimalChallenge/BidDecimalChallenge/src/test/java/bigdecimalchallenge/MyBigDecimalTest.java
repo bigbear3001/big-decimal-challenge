@@ -12,22 +12,48 @@ public abstract class MyBigDecimalTest extends TestCase {
 		decimalToTest = getImplementation().newInstance().fromNumber(0);
 	}
 	
-	public void testFromNumber() {
+	public void test01FromNumberInteger() {
 		MyBigDecimal value = decimalToTest.fromNumber(0);
-		assertEquals("toString of 0 is not correct.", "0", value.toString());
-		value = decimalToTest.fromNumber(0.66);
-		assertEquals("toString of 0.66 is not correct.", "0.66", value.toString());
+		assertEquals("fromNumber of 0 is not correct.", "0", value.toString());
+		value = decimalToTest.fromNumber(5);
+		assertEquals("fromNumber of 5 is not correct.", "5", value.toString());
+		value = decimalToTest.fromNumber(17);
+		assertEquals("fromNumber of 17 is not correct.", "17", value.toString());
+		value = decimalToTest.fromNumber(999);
+		assertEquals("fromNumber of 999 is not correct.", "999", value.toString());
+	}
+
+	public void test02FromNumberDouble() {
+		MyBigDecimal value = decimalToTest.fromNumber(0.66);
+		assertEquals("fromNumber of 0.66 is not correct.", "0.66", value.toString());
+		value = decimalToTest.fromNumber(0.67);
+		assertEquals("fromNumber of 0.67 is not correct.", "0.67", value.toString());
+		value = decimalToTest.fromNumber(999.67);
+		assertEquals("fromNumber of 999.67 is not correct.", "999.67", value.toString());
 		value = decimalToTest.fromNumber(-0.12);
-		assertEquals("toString of -0.12 is not correct.", "-0.12", value.toString());
+		assertEquals("fromNumber of -0.12 is not correct.", "-0.12", value.toString());
+	}
+
+	
+	public void test03ToNumber() throws NotANumberException {
+		MyBigDecimal value = decimalToTest.fromNumber(0);
+		assertEquals("toNumber of 0 is not correct.", 0, value.toNumber());
+		value = decimalToTest.fromNumber(0.66);
+		assertEquals("toNumber of 0.66 is not correct.", 0.66, value.toNumber());
+		value = decimalToTest.fromNumber(-0.12);
+		assertEquals("toNumber of -0.12 is not correct.", -0.12, value.toNumber());
+		value = decimalToTest.fromNumber(-67890.12);
+		assertEquals("toNumber of -67890.12 is not correct.", -67890.12, value.toNumber());
 	}
 	
-	public void testAdd() {
+	
+	public void test04Add() {
 		MyBigDecimal value = decimalToTest.add(1);
-		assertEquals("toString of 1 is not correct.", "1", value.toString());
+		assertEquals("add of 0 and 1 not correct.", "1", value.toString());
 		value = decimalToTest.add(1.99);
-		assertEquals("toString of 2.99 is not correct.", "2.99", value.toString());
+		assertEquals("add of 1 and 1.99 not correct.", "2.99", value.toString());
 		value = decimalToTest.add(-1.66);
-		assertEquals("toString of 1.33 is not correct.", "1.33", value.toString());
+		assertEquals("add of 2.99 and 1.66 not correct.", "1.33", value.toString());
 		
 	}
 	
