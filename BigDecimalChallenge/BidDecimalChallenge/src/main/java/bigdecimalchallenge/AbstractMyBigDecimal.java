@@ -1,7 +1,7 @@
 package bigdecimalchallenge;
 
 /**
- * 
+ * Simple Implementation of the number methods in {@link MyBigDecimal}.
  * @author bigbear3001
  *
  */
