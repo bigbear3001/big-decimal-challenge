@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 import bigdecimalchallenge.AbstractMyBigDecimal;
-import bigdecimalchallenge.MyBigDecimal;
+import bigdecimalchallenge.BigDecimal;
 import bigdecimalchallenge.NotANumberException;
 
 public class PerhabBigDecimal extends AbstractMyBigDecimal {
@@ -42,7 +42,7 @@ public class PerhabBigDecimal extends AbstractMyBigDecimal {
 		data = value;
 	}
 	
-	public MyBigDecimal add(MyBigDecimal value) {
+	public BigDecimal add(BigDecimal value) {
 		PerhabBigDecimal perhabValue = toPerhabBigDecimal(value);
 		PerhabBigDecimalValue newData = new PerhabBigDecimalValue(new Vector<Integer>(), 0);
 		if(perhabValue.data.decimalPlaces > data.decimalPlaces) {
@@ -70,23 +70,23 @@ public class PerhabBigDecimal extends AbstractMyBigDecimal {
 		return new PerhabBigDecimal(newData);
 	}
 	
-	public MyBigDecimal div(MyBigDecimal value) {
+	public BigDecimal divide(BigDecimal value) {
 		throw new RuntimeException("Not yet implemented");
 	}
 	
-	public MyBigDecimal mul(MyBigDecimal value) {
+	public BigDecimal multiply(BigDecimal value) {
 		throw new RuntimeException("Not yet implemented");
 	}
 	
-	public MyBigDecimal sub(MyBigDecimal value) {
+	public BigDecimal subtract(BigDecimal value) {
 		throw new RuntimeException("Not yet implemented");
 	}
 	
-	public MyBigDecimal sub(Number value) {
+	public BigDecimal sub(Number value) {
 		throw new RuntimeException("Not yet implemented");
 	}
 	
-	public MyBigDecimal fromNumber(Number value) {
+	public BigDecimal fromNumber(Number value) {
 		if(value instanceof Integer) {
 			return fromInteger((Integer) value);
 		} else if(value instanceof Double) {
@@ -124,7 +124,7 @@ public class PerhabBigDecimal extends AbstractMyBigDecimal {
 		return data;
 	}
 	
-	private PerhabBigDecimal toPerhabBigDecimal(MyBigDecimal value) {
+	private PerhabBigDecimal toPerhabBigDecimal(BigDecimal value) {
 		PerhabBigDecimal perhabValue;
 		if(!(value instanceof PerhabBigDecimal)) {
 			try {
@@ -143,7 +143,7 @@ public class PerhabBigDecimal extends AbstractMyBigDecimal {
 		return decimalString.length();
 	}
 	
-	private MyBigDecimal fromDouble(Double value) {
+	private BigDecimal fromDouble(Double value) {
 		PerhabBigDecimal newValue = toPerhabBigDecimal(fromInteger(value.intValue()));
 		int decimalPlaces = getDecimalPlaces(value);
 		Double doubleDecimals = (Math.pow(10, decimalPlaces) * (value)) - (Math.pow(10, decimalPlaces) * value.intValue());
@@ -154,7 +154,7 @@ public class PerhabBigDecimal extends AbstractMyBigDecimal {
 		return newValue;
 	}
 
-	private MyBigDecimal fromInteger(Integer value) {
+	private BigDecimal fromInteger(Integer value) {
 		Vector<Integer> newValue = new Vector<Integer>();
 		int intValue = value.intValue();
 		while(intValue != 0) {

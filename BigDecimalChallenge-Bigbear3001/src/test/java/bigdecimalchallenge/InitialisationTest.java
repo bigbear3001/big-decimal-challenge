@@ -2,9 +2,9 @@ package bigdecimalchallenge;
 
 import junit.framework.TestCase;
 
-public abstract class MyBigDecimalTest extends TestCase {
+public abstract class InitialisationTest extends TestCase {
 	
-	MyBigDecimal decimalToTest;
+	BigDecimal decimalToTest;
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -13,7 +13,7 @@ public abstract class MyBigDecimalTest extends TestCase {
 	}
 	
 	public void test01FromNumberInteger() {
-		MyBigDecimal value = decimalToTest.fromNumber(0);
+		BigDecimal value = decimalToTest.fromNumber(0);
 		assertEquals("fromNumber of 0 is not correct.", "0", value.toString());
 		value = decimalToTest.fromNumber(5);
 		assertEquals("fromNumber of 5 is not correct.", "5", value.toString());
@@ -24,7 +24,7 @@ public abstract class MyBigDecimalTest extends TestCase {
 	}
 
 	public void test02FromNumberDouble() {
-		MyBigDecimal value = decimalToTest.fromNumber(0.66);
+		BigDecimal value = decimalToTest.fromNumber(0.66);
 		assertEquals("fromNumber of 0.66 is not correct.", "0.66", value.toString());
 		value = decimalToTest.fromNumber(0.67);
 		assertEquals("fromNumber of 0.67 is not correct.", "0.67", value.toString());
@@ -36,7 +36,7 @@ public abstract class MyBigDecimalTest extends TestCase {
 
 	
 	public void test03ToNumber() throws NotANumberException {
-		MyBigDecimal value = decimalToTest.fromNumber(0);
+		BigDecimal value = decimalToTest.fromNumber(0);
 		assertEquals("toNumber of 0 is not correct.", 0, value.toNumber());
 		value = decimalToTest.fromNumber(0.66);
 		assertEquals("toNumber of 0.66 is not correct.", 0.66, value.toNumber());
@@ -48,7 +48,7 @@ public abstract class MyBigDecimalTest extends TestCase {
 	
 	
 	public void test04Add() {
-		MyBigDecimal value = decimalToTest.add(1);
+		BigDecimal value = decimalToTest.add(1);
 		assertEquals("add of 0 and 1 not correct.", "1", value.toString());
 		value = decimalToTest.add(1.99);
 		assertEquals("add of 1 and 1.99 not correct.", "2.99", value.toString());
@@ -57,5 +57,5 @@ public abstract class MyBigDecimalTest extends TestCase {
 		
 	}
 	
-	public abstract Class<? extends MyBigDecimal> getImplementation();
+	public abstract Class<? extends BigDecimal> getImplementation();
 }
