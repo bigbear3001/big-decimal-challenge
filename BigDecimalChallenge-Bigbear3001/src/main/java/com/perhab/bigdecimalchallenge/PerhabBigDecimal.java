@@ -4,11 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-import bigdecimalchallenge.AbstractMyBigDecimal;
 import bigdecimalchallenge.BigDecimal;
-import bigdecimalchallenge.NotANumberException;
 
-public class PerhabBigDecimal extends AbstractMyBigDecimal {
+public class PerhabBigDecimal implements BigDecimal {
 
 	/**
 	 * {@link PerhabBigDecimalValue} represents the value of {@link PerhabBigDecimal}.
