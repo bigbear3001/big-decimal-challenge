@@ -1,5 +1,8 @@
 package com.perhab.bigdecimalchallenge;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -26,7 +29,12 @@ public class PerhabBigDecimal implements BigDecimal {
 		/**
 		 * defines the floating points position.
 		 */
-		private int decimalPlaces; 
+		private int decimalPlaces;
+		
+		/**
+		 * defines if the number is negative
+		 */
+		private boolean negative = false;
 	}
 	
 	private static final int BASE = 10;
@@ -44,10 +52,32 @@ public class PerhabBigDecimal implements BigDecimal {
 	 */
 	public PerhabBigDecimal(String number) {
 		if(number.matches(VALID_NUMBER)) {
-			data = new PerhabBigDecimalValue(new Vector<Integer>(), 0);
-			if(number.startsWith("-"));
+			try {
+				data = new PerhabBigDecimalValue(new Vector<Integer>(), 0);
+				StringReader reader = new StringReader(number);
+				if(number.startsWith("-")) {
+					data.negative = true;
+					reader.read();
+				}
+				char read;
+				boolean foundDecimalPoint = false;
+				while((read = (char) reader.read()) != -1) {
+					if (read != '.') {
+						int value = Integer.parseInt(read + "");
+						data.data.add(0,value);
+						if(foundDecimalPoint) {
+							data.decimalPlaces++;
+						}
+					} else {
+						foundDecimalPoint = true;
+					}
+				}
+			} catch (Exception e) {
+				throw new InvalidNumberFormatException("We got an exception reading the String.", e);
+			}
+		} else {
+			throw new InvalidNumberFormatException(number + " doesn't match " + VALID_NUMBER);
 		}
-		throw new InvalidNumberFormatException(number + " doesn't match " + VALID_NUMBER);
 	}
 	
 	private PerhabBigDecimal(PerhabBigDecimalValue value) {
@@ -100,6 +130,9 @@ public class PerhabBigDecimal implements BigDecimal {
 	
 	public String toString(){
 		StringBuilder value = new StringBuilder();
+		if(data.negative) {
+			value.append('-');
+		}
 		for(int i = data.data.size() -1 ; i >= 0; i--) {
 			value.append(data.data.get(i));
 			if(i == data.decimalPlaces && i != 0) {
