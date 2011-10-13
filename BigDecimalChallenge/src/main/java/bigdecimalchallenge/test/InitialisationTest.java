@@ -24,7 +24,7 @@ public class InitialisationTest {
 		
 		// some simple numbers
 		for (String number : numbers) {
-			BigDecimal bd = TestUtils.createInstance(number);
+			BigDecimal<?> bd = TestUtils.createInstance(number);
 			assertEquals("Creating number from String " + number + " doesn't equal number.toString()", number, bd.toString());
 		}
 		
@@ -34,7 +34,7 @@ public class InitialisationTest {
 			largeInteger.append(number);
 		}
 		for (int i = 0; i < 10; i++) {
-			BigDecimal bd = TestUtils.createInstance(largeInteger.toString());
+			BigDecimal<?> bd = TestUtils.createInstance(largeInteger.toString());
 			assertEquals("Creating number from String " + largeInteger.toString() + " doesn't equal number.toString()", largeInteger.toString(), bd.toString());
 			largeInteger.append(largeInteger.toString());
 		}

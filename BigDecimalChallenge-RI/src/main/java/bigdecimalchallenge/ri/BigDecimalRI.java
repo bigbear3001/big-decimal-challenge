@@ -7,7 +7,7 @@ import bigdecimalchallenge.BigDecimal;
  * 
  * @author fgutmann
  */
-public class BigDecimalRI implements BigDecimal {
+public class BigDecimalRI implements BigDecimal<BigDecimalRI> {
 	
 	private java.math.BigDecimal bd;
 	
@@ -20,31 +20,23 @@ public class BigDecimalRI implements BigDecimal {
 	}
 	
 	@Override
-	public BigDecimal add(BigDecimal value) {
-		BigDecimalRI number = (BigDecimalRI) value;
-		
-		return new BigDecimalRI(bd.add(number.bd));
+	public BigDecimalRI add(BigDecimalRI value) {
+		return new BigDecimalRI(bd.add(value.bd));
 	}
 
 	@Override
-	public BigDecimal subtract(BigDecimal value) {
-		BigDecimalRI number = (BigDecimalRI) value;
-		
-		return new BigDecimalRI(bd.subtract(number.bd));
+	public BigDecimalRI subtract(BigDecimalRI value) {
+		return new BigDecimalRI(bd.subtract(value.bd));
 	}
 
 	@Override
-	public BigDecimal divide(BigDecimal value) {
-		BigDecimalRI number = (BigDecimalRI) value;
-		
-		return new BigDecimalRI(bd.divide(number.bd));
+	public BigDecimalRI divide(BigDecimalRI value) {
+		return new BigDecimalRI(bd.divide(value.bd));
 	}
 
 	@Override
-	public BigDecimal multiply(BigDecimal value) {
-		BigDecimalRI number = (BigDecimalRI) value;
-		
-		return new BigDecimalRI(bd.multiply(number.bd));
+	public BigDecimalRI multiply(BigDecimalRI value) {
+		return new BigDecimalRI(bd.multiply(value.bd));
 	}
 	
 	@Override

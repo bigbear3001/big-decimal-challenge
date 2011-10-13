@@ -7,7 +7,7 @@ import bigdecimalchallenge.BigDecimal;
 public class TestUtils {
 	
 	static Class<?>clazz;
-	static Constructor<? extends BigDecimal> implConstructor;
+	static Constructor<? extends BigDecimal<?>> implConstructor;
 	
 	static {
 		String name = System.getProperty("bigdecimalchallenge.impl");
@@ -20,7 +20,7 @@ public class TestUtils {
 			if(! BigDecimal.class.isAssignableFrom(clazz)) {
 				throw new Exception("Must implement " + BigDecimal.class.getCanonicalName());
 			}
-			implConstructor = (Constructor<? extends BigDecimal>) clazz.getConstructor(String.class);
+			implConstructor = (Constructor<? extends BigDecimal<?>>) clazz.getConstructor(String.class);
 		} catch (Exception e) {
 			throw new RuntimeException("Error initializing BigDecimal implementation " + name, e);
 		}
@@ -32,7 +32,7 @@ public class TestUtils {
 	 * @param number The number for which to create a BigDecimal.
 	 * @return The instance initialized with the number.
 	 */
-	public static BigDecimal createInstance(String number) {
+	public static BigDecimal<?> createInstance(String number) {
 		try {
 			return implConstructor.newInstance(number);	
 		} catch (Exception e) {
