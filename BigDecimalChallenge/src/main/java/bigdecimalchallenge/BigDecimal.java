@@ -35,7 +35,6 @@ public interface BigDecimal {
 	 */
 	public BigDecimal divide(BigDecimal value);
 	
-	
 	/**
 	 * multiply this big decimal with another big decimal
 	 * @param value - value to multiply this big decimal by
