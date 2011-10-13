@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 import bigdecimalchallenge.BigDecimal;
+import bigdecimalchallenge.InvalidNumberFormatException;
 
 public class PerhabBigDecimal implements BigDecimal {
 
@@ -30,10 +31,23 @@ public class PerhabBigDecimal implements BigDecimal {
 	
 	private static final int BASE = 10;
 	
+	private static final String VALID_NUMBER = "-?[0-9]+(\\.[0-9]+)?";
+	
 	private PerhabBigDecimalValue data;
 	
 	public PerhabBigDecimal() {
 		data = new PerhabBigDecimalValue(Arrays.asList(new Integer[]{0}), 0);
+	}
+	/**
+	 * reads the big decimal from a string in the form -?[0-9]+(\.[0-9]+)?)
+	 * @param number - number as string
+	 */
+	public PerhabBigDecimal(String number) {
+		if(number.matches(VALID_NUMBER)) {
+			data = new PerhabBigDecimalValue(new Vector<Integer>(), 0);
+			if(number.startsWith("-"));
+		}
+		throw new InvalidNumberFormatException(number + " doesn't match " + VALID_NUMBER);
 	}
 	
 	private PerhabBigDecimal(PerhabBigDecimalValue value) {
@@ -84,26 +98,6 @@ public class PerhabBigDecimal implements BigDecimal {
 		throw new RuntimeException("Not yet implemented");
 	}
 	
-	public BigDecimal fromNumber(Number value) {
-		if(value instanceof Integer) {
-			return fromInteger((Integer) value);
-		} else if(value instanceof Double) {
-			return fromDouble((Double) value);
-		}
-		throw new RuntimeException("Not yet implemented");
-	}
-	
-	public Number toNumber(){
-		if(data.decimalPlaces == 0) {
-			int intValue = 0;
-			for(int i = 0; i < data.data.size(); i++) {
-				intValue += Math.pow(BASE, i) * data.data.get(i);
-			}
-			return intValue;
-		}
-		throw new RuntimeException("Not yet implemented");
-	}
-	
 	public String toString(){
 		StringBuilder value = new StringBuilder();
 		for(int i = data.data.size() -1 ; i >= 0; i--) {
@@ -125,11 +119,7 @@ public class PerhabBigDecimal implements BigDecimal {
 	private PerhabBigDecimal toPerhabBigDecimal(BigDecimal value) {
 		PerhabBigDecimal perhabValue;
 		if(!(value instanceof PerhabBigDecimal)) {
-			try {
-				perhabValue = (PerhabBigDecimal) fromNumber(value.toNumber());
-			} catch (NotANumberException e) {
-				throw new RuntimeException("Cannot read the given value as number and it's not an implementation of PerhabBigDecimal.", e);
-			}
+			perhabValue = new PerhabBigDecimal(value.toString());
 		} else {
 			perhabValue = (PerhabBigDecimal) value;
 		}
@@ -141,28 +131,4 @@ public class PerhabBigDecimal implements BigDecimal {
 		return decimalString.length();
 	}
 	
-	private BigDecimal fromDouble(Double value) {
-		PerhabBigDecimal newValue = toPerhabBigDecimal(fromInteger(value.intValue()));
-		int decimalPlaces = getDecimalPlaces(value);
-		Double doubleDecimals = (Math.pow(10, decimalPlaces) * (value)) - (Math.pow(10, decimalPlaces) * value.intValue());
-		PerhabBigDecimal doubleValue = toPerhabBigDecimal(fromInteger(doubleDecimals.intValue()));
-		
-		newValue.data.data.addAll(0, doubleValue.data.data);
-		newValue.data.decimalPlaces = decimalPlaces;
-		return newValue;
-	}
-
-	private BigDecimal fromInteger(Integer value) {
-		Vector<Integer> newValue = new Vector<Integer>();
-		int intValue = value.intValue();
-		while(intValue != 0) {
-			newValue.add(intValue % BASE);
-			intValue = intValue / BASE;
-		}
-		if(newValue.size() == 0) {
-			newValue.add(0);
-		}
-		return new PerhabBigDecimal(new PerhabBigDecimalValue(newValue, 0));
-	}
-
 }
