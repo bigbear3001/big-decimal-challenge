@@ -10,33 +10,61 @@ import bigdecimalchallenge.BigDecimal;
  * 
  * @author fgutmann
  */
-public class InitialisationTest {
+public class InitialisationTest extends BigDecimalTest {
+
+	/**
+	 * Creates a big decimal from the given string and asserts that it is equal to the toString() output.
+	 * Provides a nice error message on failure.
+	 * 
+	 * @param numberString The number as string to test
+	 */
+	private void assertCreation(String numberString) {
+		System.out.println("Creating number from String " + numberString + " doesn't equal number.toString()");
+		BigDecimal<Object> bigDecimal = number(numberString);
+		assertEquals("Creating number from String " + numberString + " doesn't equal number.toString()", numberString, bigDecimal.toString());
+	}
+	
+	/**
+	 * Tests integers either positive or negative
+	 * 
+	 * @param positive If the integers should be positive or negative
+	 */
+	public void integer(boolean positive) {
+		
+		// digits, one to hundred
+		for(String number : Numbers.digits) {
+			if(!positive && number.equals("0")) {
+				continue; // skip -0
+			}
+			assertCreation((positive ? "" : "-") + number);
+		}
+		
+		// 1 to 100
+		for(String number : Numbers.oneToHundred) {
+			assertCreation((positive ? "" : "-") + number);
+		}
+		
+		// 1, 12, 123, 1234, 12345, ... until 1000 digits
+		StringBuilder builder = new StringBuilder();
+		for(int i = 0; i < 1000; i++) {
+			builder.append((i + 1) % 10);
+			assertCreation((positive ? "" : "-") + builder.toString());
+		}
+	}
 	
 	/**
 	 * Tests initialization of positive integer values
 	 */
 	@Test
 	public void positiveInteger() {
-		String [] numbers = new String [] {
-			"1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-			"100", "1000", "1000", "10000", "100000", "100000", "1000000", "1000000",
-		};
-		
-		// some simple numbers
-		for (String number : numbers) {
-			BigDecimal<?> bd = TestUtils.createInstance(number);
-			assertEquals("Creating number from String " + number + " doesn't equal number.toString()", number, bd.toString());
-		}
-		
-		// all numbers concatenated together
-		StringBuilder largeInteger = new StringBuilder();
-		for(String number : numbers) {
-			largeInteger.append(number);
-		}
-		for (int i = 0; i < 10; i++) {
-			BigDecimal<?> bd = TestUtils.createInstance(largeInteger.toString());
-			assertEquals("Creating number from String " + largeInteger.toString() + " doesn't equal number.toString()", largeInteger.toString(), bd.toString());
-			largeInteger.append(largeInteger.toString());
-		}
+		integer(true);
+	}
+	
+	/**
+	 * Tests initialization of negative integers
+	 */
+	@Test
+	public void negativeInteger() {
+		integer(false);
 	}
 }
