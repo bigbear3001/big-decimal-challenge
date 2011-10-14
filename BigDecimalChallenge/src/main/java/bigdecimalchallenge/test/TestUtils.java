@@ -32,9 +32,9 @@ public class TestUtils {
 	 * @param number The number for which to create a BigDecimal.
 	 * @return The instance initialized with the number.
 	 */
-	public static BigDecimal<?> createInstance(String number) {
+	public static BigDecimal<? extends BigDecimal<?>> createInstance(String number) {
 		try {
-			return implConstructor.newInstance(number);	
+			return (BigDecimal)implConstructor.newInstance(number);	
 		} catch (Exception e) {
 			throw new RuntimeException("Could not instantiate BigDecimal of type " + clazz.getCanonicalName() + " for number " + number, e);
 		}

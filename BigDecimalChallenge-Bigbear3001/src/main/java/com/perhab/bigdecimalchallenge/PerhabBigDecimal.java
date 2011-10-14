@@ -10,7 +10,7 @@ import java.util.Vector;
 import bigdecimalchallenge.BigDecimal;
 import bigdecimalchallenge.InvalidNumberFormatException;
 
-public class PerhabBigDecimal implements BigDecimal {
+public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 
 	/**
 	 * {@link PerhabBigDecimalValue} represents the value of {@link PerhabBigDecimal}.
@@ -59,11 +59,11 @@ public class PerhabBigDecimal implements BigDecimal {
 					data.negative = true;
 					reader.read();
 				}
-				char read;
+				int read;
 				boolean foundDecimalPoint = false;
-				while((read = (char) reader.read()) != -1) {
-					if (read != '.') {
-						int value = Integer.parseInt(read + "");
+				while((read = reader.read()) != -1) {
+					if ((char) read != '.') {
+						int value = Integer.parseInt(((char) read) + "");
 						data.data.add(0,value);
 						if(foundDecimalPoint) {
 							data.decimalPlaces++;
@@ -84,25 +84,24 @@ public class PerhabBigDecimal implements BigDecimal {
 		data = value;
 	}
 	
-	public BigDecimal add(BigDecimal value) {
-		PerhabBigDecimal perhabValue = toPerhabBigDecimal(value);
+	public PerhabBigDecimal add(PerhabBigDecimal value) {
 		PerhabBigDecimalValue newData = new PerhabBigDecimalValue(new Vector<Integer>(), 0);
-		if(perhabValue.data.decimalPlaces > data.decimalPlaces) {
-			newData.decimalPlaces = perhabValue.data.decimalPlaces;
+		if(value.data.decimalPlaces > data.decimalPlaces) {
+			newData.decimalPlaces = value.data.decimalPlaces;
 		} else {
 			newData.decimalPlaces = data.decimalPlaces; 
 		}
 		for(int i = 0; i < newData.decimalPlaces; i++) {
 			int placeValue = 0;
-			if(perhabValue.data.decimalPlaces > i) {
-				placeValue += perhabValue.data.data.get(i);
+			if(value.data.decimalPlaces > i) {
+				placeValue += value.data.data.get(i);
 			}
 			newData.data.add(placeValue);
 		}
-		for(int i = newData.decimalPlaces; i < perhabValue.data.data.size() || i < data.data.size(); i++) {
+		for(int i = newData.decimalPlaces; i < value.data.data.size() || i < data.data.size(); i++) {
 			int placeValue = 0;
-			if(perhabValue.data.data.size() > i) {
-				placeValue += perhabValue.data.data.get(i);
+			if(value.data.data.size() > i) {
+				placeValue += value.data.data.get(i);
 			}
 			if(data.data.size() > i) {
 				placeValue += data.data.get(i);
@@ -110,22 +109,6 @@ public class PerhabBigDecimal implements BigDecimal {
 			newData.data.add(placeValue);
 		}
 		return new PerhabBigDecimal(newData);
-	}
-	
-	public BigDecimal divide(BigDecimal value) {
-		throw new RuntimeException("Not yet implemented");
-	}
-	
-	public BigDecimal multiply(BigDecimal value) {
-		throw new RuntimeException("Not yet implemented");
-	}
-	
-	public BigDecimal subtract(BigDecimal value) {
-		throw new RuntimeException("Not yet implemented");
-	}
-	
-	public BigDecimal sub(Number value) {
-		throw new RuntimeException("Not yet implemented");
 	}
 	
 	public String toString(){
@@ -145,23 +128,17 @@ public class PerhabBigDecimal implements BigDecimal {
 	
 	
 	
-	private PerhabBigDecimalValue getData() {
-		return data;
+	public PerhabBigDecimal subtract(PerhabBigDecimal value) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	private PerhabBigDecimal toPerhabBigDecimal(BigDecimal value) {
-		PerhabBigDecimal perhabValue;
-		if(!(value instanceof PerhabBigDecimal)) {
-			perhabValue = new PerhabBigDecimal(value.toString());
-		} else {
-			perhabValue = (PerhabBigDecimal) value;
-		}
-		return perhabValue;
+	public PerhabBigDecimal divide(PerhabBigDecimal value) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	private int getDecimalPlaces(Double value) {
-		String decimalString = value.toString().replaceAll("[0-9]+\\.", "");
-		return decimalString.length();
+	public PerhabBigDecimal multiply(PerhabBigDecimal value) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
