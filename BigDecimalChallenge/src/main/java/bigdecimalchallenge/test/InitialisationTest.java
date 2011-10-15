@@ -19,7 +19,6 @@ public class InitialisationTest extends BigDecimalTest {
 	 * @param numberString The number as string to test
 	 */
 	private void assertCreation(String numberString) {
-		System.out.println("Creating number from String " + numberString + " doesn't equal number.toString()");
 		BigDecimal<Object> bigDecimal = number(numberString);
 		assertEquals("Creating number from String " + numberString + " doesn't equal number.toString()", numberString, bigDecimal.toString());
 	}
