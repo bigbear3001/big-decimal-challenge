@@ -33,6 +33,11 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		 * defines if the number is negative
 		 */
 		private boolean negative = false;
+		
+		@Override
+		public String toString(){
+			return new PerhabBigDecimal(this).toString();
+		}
 	}
 	
 	private static final int BASE = 10;
@@ -96,15 +101,26 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 			}
 			newData.data.add(placeValue);
 		}
+		int carrier = 0;
 		for(int i = newData.decimalPlaces; i < value.data.data.size() || i < data.data.size(); i++) {
-			int placeValue = 0;
+			int placeValue = carrier;
+			carrier = 0;
+			int valueOffset = 0;
+			int dataOffset = 0;
 			if(value.data.data.size() > i) {
 				placeValue += value.data.data.get(i);
 			}
 			if(data.data.size() > i) {
 				placeValue += data.data.get(i);
 			}
+			if(placeValue >= BASE) {
+				carrier = 1;
+				placeValue -= BASE;
+			}
 			newData.data.add(placeValue);
+		}
+		if(carrier != 0) {
+			newData.data.add(carrier);
 		}
 		return new PerhabBigDecimal(newData);
 	}
