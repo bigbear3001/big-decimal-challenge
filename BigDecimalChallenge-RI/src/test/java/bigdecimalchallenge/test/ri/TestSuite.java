@@ -6,11 +6,11 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import bigdecimalchallenge.ri.BigDecimalRI;
-import bigdecimalchallenge.test.InitialisationTest;
+import bigdecimalchallenge.test.FullTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	InitialisationTest.class
+	FullTests.class
 })
 public class TestSuite {
 	
