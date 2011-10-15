@@ -1,8 +1,6 @@
 package com.perhab.bigdecimalchallenge;
 
-import java.io.IOException;
 import java.io.StringReader;
-import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;

@@ -6,7 +6,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import bigdecimalchallenge.test.FullTests;
-import bigdecimalchallenge.test.InitialisationTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
