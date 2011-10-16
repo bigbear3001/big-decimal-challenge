@@ -23,7 +23,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	protected abstract void testOperation(String number1, String number2);
 	
 	/**
-	 * add simple integers to digits
+	 * test simple integers to digits
 	 */
 	@Test
 	public void integers() {
@@ -34,7 +34,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 		}
 	}
 	/**
-	 * add negative integers to digits
+	 * test negative integers to digits
 	 */
 	@Test
 	public void negativeIntegers() {
@@ -46,7 +46,19 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	}
 	
 	/**
-	 * add simple doubles to doubles
+	 * test negative integers to negative digits
+	 */
+	@Test
+	public void negativeWithNegativeIntegers() {
+		for(int i = 0; i < Numbers.digits.length; i++) {
+			for(int j = 0; j < Numbers.oneToHundred.length; j++) {
+				testOperation("-" + Numbers.digits[i], "-" + Numbers.oneToHundred[j]);
+			}
+		}
+	}
+	
+	/**
+	 * test simple doubles to doubles
 	 */
 	@Test
 	public void doubles() {
@@ -62,7 +74,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	}
 	
 	/**
-	 * add negative doubles to doubles
+	 * test negative doubles to doubles
 	 */
 	@Test
 	public void negativeDoubles() {
@@ -78,7 +90,23 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	}
 	
 	/**
-	 * add integers to doubles
+	 * test negative doubles to negative doubles
+	 */
+	@Test
+	public void negativeWithNegativeDoubles() {
+		for(int i = 0; i < Numbers.digits.length; i++) {
+			for(int j = 0; j < Numbers.digits.length; j++) {
+				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
+					for(int l = 0; l < Numbers.oneToHundred.length; l++) {
+						testOperation("-" + Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * test integers to doubles
 	 */
 	@Test
 	public void integersToDoubles() {
@@ -92,7 +120,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	}
 	
 	/**
-	 * add negative integers to doubles
+	 * test negative integers to doubles
 	 */
 	@Test
 	public void negativeIntegersToDoubles() {
@@ -106,7 +134,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	}
 	
 	/**
-	 * add doubles to integers
+	 * test doubles to integers
 	 */
 	@Test
 	public void doublesToIntegers() {
@@ -120,7 +148,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	}
 	
 	/**
-	 * add negative doubles to integers
+	 * test negative doubles to integers
 	 */
 	@Test
 	public void negativeDoublesToIntegers() {
