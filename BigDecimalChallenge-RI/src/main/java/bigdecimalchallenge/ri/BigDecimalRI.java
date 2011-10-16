@@ -41,7 +41,7 @@ public class BigDecimalRI implements BigDecimal<BigDecimalRI> {
 	
 	@Override
 	public String toString() {
-		return bd.stripTrailingZeros().toPlainString();
+		return bd.stripTrailingZeros().toPlainString().replaceAll("\\.0+$", "");
 	}
 	
 	@Override
