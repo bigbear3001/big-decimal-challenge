@@ -17,6 +17,8 @@ import bigdecimalchallenge.BigDecimal;
 public class DivideTest extends SimpleMathTest {
 	/**
 	 * We prepare to get an Arithmetic Exception when dividing by zero or getting a periodical result as with 1/9.
+	 * !Important: don't overload this with ExpectedException.none() when running tests as the framework holds a reference to the initial ExpectedException.
+	 * Instead use thrown.expect((Matcher<Object>) null) to reset the ExpectedException.
 	 */
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
