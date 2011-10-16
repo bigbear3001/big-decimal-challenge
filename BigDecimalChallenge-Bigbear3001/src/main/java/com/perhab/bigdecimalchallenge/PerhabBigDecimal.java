@@ -182,7 +182,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		} else {
 			valueOffset = data.decimalPlaces - value.data.decimalPlaces;
 		}
-		PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), dataOffset > valueOffset ? dataOffset : valueOffset);
+		PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), value.data.decimalPlaces > data.decimalPlaces ? value.data.decimalPlaces : data.decimalPlaces);
 		boolean carry = false;
 		int places = Math.max(dataOffset + data.data.size(), valueOffset + value.data.data.size());
 		for(int i = 0; i < places; i++) {
@@ -201,7 +201,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		}
 		//if we still have a carry bit we have to subtract the result from the next tenfold
 		if(carry) {
-			PerhabBigDecimal complement = new PerhabBigDecimal(Math.pow(BASE, newValue.data.size()) + "");
+			PerhabBigDecimal complement = new PerhabBigDecimal(Math.pow(BASE, places - newValue.decimalPlaces) + "");
 			complement = complement.subtract(new PerhabBigDecimal(newValue));
 			complement.data.negative = true;
 			return complement;
@@ -252,7 +252,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		}
 		
 		place = data.data.get(data.data.size() - 1);
-		while (place == 0 && data.data.size() > 1) {
+		while (place == 0 && data.data.size() - data.decimalPlaces > 1) {
 			data.data.remove(data.data.size() - 1);
 			place = data.data.get(data.data.size() - 1);
 		}
