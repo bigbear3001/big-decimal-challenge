@@ -92,12 +92,14 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		} else {
 			throw new InvalidNumberFormatException(number + " doesn't match " + VALID_NUMBER);
 		}
+		validate();
 	}
 	
 	private PerhabBigDecimal(PerhabBigDecimalValue value) {
 		data = value;
+		validate();
 	}
-	
+
 	public PerhabBigDecimal add(PerhabBigDecimal value) {
 		if(data.negative && value.data.negative) {
 			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) data.clone();
@@ -150,9 +152,9 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		if(data.negative && value.data.negative) {
 			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) data.clone();
 			newData.negative = false;
-			PerhabBigDecimalValue newValue = (PerhabBigDecimalValue) data.clone();
-			newData.negative = false;
-			PerhabBigDecimal result = new PerhabBigDecimal(newValue).subtract(new PerhabBigDecimal(newData));
+			PerhabBigDecimalValue newValue = (PerhabBigDecimalValue) value.data.clone();
+			newValue.negative = false;
+			PerhabBigDecimal result = new PerhabBigDecimal(newData).subtract(new PerhabBigDecimal(newValue));
 			if(result.data.negative) {
 				result.data.negative = false;
 			} else {
@@ -226,7 +228,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 	}
 	
 	public String toString(){
-		stripTrailingZeros();
+		validate();
 		StringBuilder value = new StringBuilder();
 		if(data.negative) {
 			value.append('-');
@@ -243,7 +245,6 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 	
 	
 	private void stripTrailingZeros() {
-		
 		int place = data.data.get(0);
 		while (data.decimalPlaces > 0 && place == 0) {
 			data.data.remove(0);
@@ -256,5 +257,24 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 			data.data.remove(data.data.size() - 1);
 			place = data.data.get(data.data.size() - 1);
 		}
+	}
+	
+	private void validate() {
+		stripTrailingZeros();
+		if(isZero() && isNegative()) {
+			data.negative = false;
+		}
+	}
+
+	private boolean isZero() {
+		for(int i = 0; i < data.data.size(); i++) {
+			if(data.data.get(i) != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+	private boolean isNegative() {
+		return data.negative;
 	}
 }
