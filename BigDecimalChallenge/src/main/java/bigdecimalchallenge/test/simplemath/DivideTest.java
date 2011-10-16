@@ -5,6 +5,8 @@ import static junit.framework.Assert.*;
 import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import bigdecimalchallenge.BigDecimal;
 
@@ -15,6 +17,9 @@ import bigdecimalchallenge.BigDecimal;
  *
  */
 public class DivideTest extends SimpleMathTest {
+	
+	final static Logger logger = LoggerFactory.getLogger(DivideTest.class);
+	
 	/**
 	 * We prepare to get an Arithmetic Exception when dividing by zero or getting a periodical result as with 1/9.
 	 * !Important: don't overload this with ExpectedException.none() when running tests as the framework holds a reference to the initial ExpectedException.
@@ -29,6 +34,7 @@ public class DivideTest extends SimpleMathTest {
 	 * @param number2 - first number is divided by the second number
 	 */
 	protected void testOperation(String number1, String number2) {
+		logger.debug("Testing subtracting numbers {} by {}", number1, number2);
 		boolean exceptionExpected = false;
 		java.math.BigDecimal expected = null;
 		//If we divide by zero we expect an ArithmeticException
