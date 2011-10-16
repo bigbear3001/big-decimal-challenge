@@ -102,8 +102,8 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		if(data.negative && value.data.negative) {
 			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) data.clone();
 			newData.negative = false;
-			PerhabBigDecimalValue newValue = (PerhabBigDecimalValue) data.clone();
-			newData.negative = false;
+			PerhabBigDecimalValue newValue = (PerhabBigDecimalValue) value.data.clone();
+			newValue.negative = false;
 			PerhabBigDecimal result = new PerhabBigDecimal(newValue).add(new PerhabBigDecimal(newData));
 			result.data.negative = true;
 			return result;
