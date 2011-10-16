@@ -6,10 +6,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import bigdecimalchallenge.BigDecimal;
 import bigdecimalchallenge.test.BigDecimalTest;
 import bigdecimalchallenge.test.Numbers;
+import bigdecimalchallenge.test.simplemath.AddTest;
 
 /**
  * Test to verify each operation creates new objects.
@@ -18,6 +21,9 @@ import bigdecimalchallenge.test.Numbers;
  *
  */
 public class CopyTest extends BigDecimalTest {
+	
+	final static Logger logger = LoggerFactory.getLogger(AddTest.class);
+	
 	/**
 	 * Test the add method of the implementation for not returning the same object as the caller object nor the same as the given object.
 	 * @throws IllegalArgumentException - @see {@link Method#invoke(Object, Object...)}
@@ -93,12 +99,16 @@ public class CopyTest extends BigDecimalTest {
 	public void testCopy(Method method) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		for(int i = 0; i < Numbers.digits.length; i++) {
 			for(int j = 0; j < Numbers.oneToHundred.length; j++) {
-				BigDecimal<Object> a = number(Numbers.digits[i]);
-				BigDecimal<Object> b = number(Numbers.oneToHundred[j]);
-				Object c = method.invoke(a, b);
-				assertNotSame("initialisation shoul not return the same object for " + a + " and " + b + ".", a, b);
-				assertNotSame("the " + method.getName() + " operation should generate a new object with each call.", a, c);
-				assertNotSame("the " + method.getName() + " operation should generate a new object with each call.", b, c);
+				try{
+					BigDecimal<Object> a = number(Numbers.digits[i]);
+					BigDecimal<Object> b = number(Numbers.oneToHundred[j]);
+					Object c = method.invoke(a, b);
+					assertNotSame("initialisation shoul not return the same object for " + a + " and " + b + ".", a, b);
+					assertNotSame("the " + method.getName() + " operation should generate a new object with each call.", a, c);
+					assertNotSame("the " + method.getName() + " operation should generate a new object with each call.", b, c);
+				} catch (ArithmeticException e) {
+					logger.debug("Testing '{}'.{}('{}') failed with arithmetic exception. Since we are not testing for that, we will ignore it.", e);
+				}
 			}
 		}
 	}
