@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bigdecimalchallenge.BigDecimal;
+import bigdecimalchallenge.test.TestUtils;
 
 
 /**
@@ -61,6 +62,6 @@ public class DivideTest extends SimpleMathTest {
 		if(exceptionExpected) {
 			fail("We expect te division by zero (" + number1 + " / " + number2 + ") to fail with an ArithmeticExcpetion.");
 		}
-		assertEquals("The implementation doesn't match the result of the java big decimal calculation (" + number1 + " / " + number2 + ")", expected.stripTrailingZeros().toPlainString(), result.toString());
+		assertEquals("The implementation doesn't match the result of the java big decimal calculation (" + number1 + " / " + number2 + ")", TestUtils.toBigDecimalString(expected), result.toString());
 	}
 }

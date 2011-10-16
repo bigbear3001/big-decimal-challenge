@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bigdecimalchallenge.BigDecimal;
+import bigdecimalchallenge.test.TestUtils;
 
 
 /**
@@ -26,7 +27,7 @@ public class AddTest extends SimpleMathTest {
 		logger.debug("Testing adding numbers {} and {}", number1, number2);
 		BigDecimal<Object> result = number(number1).add(number(number2));
 		java.math.BigDecimal expected = new java.math.BigDecimal(number1).add(new java.math.BigDecimal(number2));
-		assertEquals("The implementation doesn't match the result of the java big decimal calculation (" + number1 + " + " + number2 + ")", expected.stripTrailingZeros().toPlainString(), result.toString());
+		assertEquals("The implementation doesn't match the result of the java big decimal calculation (" + number1 + " + " + number2 + ")", TestUtils.toBigDecimalString(expected), result.toString());
 	}
 	
 }

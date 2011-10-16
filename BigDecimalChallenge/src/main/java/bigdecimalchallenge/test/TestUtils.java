@@ -53,4 +53,12 @@ public class TestUtils<T> {
 	public static TestUtils<BigDecimal<Object>> getInstance() {
 		return instance;
 	}
+	/**
+	 * This method gives us the string equivalent of the java big decimal
+	 * @param decimal - decimal to convert to string
+	 * @return string in compliance with the big decimal challenge
+	 */
+	public static String toBigDecimalString(java.math.BigDecimal decimal) {
+		return decimal.stripTrailingZeros().toPlainString().replaceAll("\\.0+$", "");
+	}
 }
