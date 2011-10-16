@@ -153,6 +153,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 	}
 	
 	public String toString(){
+		stripTrailingZeros();
 		StringBuilder value = new StringBuilder();
 		if(data.negative) {
 			value.append('-');
@@ -165,10 +166,19 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		}
 		return value.toString();
 	}
-
 	
 	
 	
+	private void stripTrailingZeros() {
+		
+		int place = data.data.get(0);
+		while (data.decimalPlaces > 0 && place == 0) {
+			data.data.remove(0);
+			data.decimalPlaces--;
+			place = data.data.get(0);
+		}
+		
+	}
 	public PerhabBigDecimal subtract(PerhabBigDecimal value) {
 		// TODO Auto-generated method stub
 		return null;
