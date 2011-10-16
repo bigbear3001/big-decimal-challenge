@@ -40,5 +40,5 @@ public interface BigDecimal<T> {
 	 * @param value - value to multiply this big decimal by
 	 * @return new big decimal with the multiplied values of this big decimal and the given big decimal
 	 */
-	public T multiply(T value);
+	public BigDecimal<T> multiply(T value);
 }
