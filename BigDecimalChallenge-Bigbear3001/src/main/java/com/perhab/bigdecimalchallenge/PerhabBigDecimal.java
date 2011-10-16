@@ -1,6 +1,7 @@
 package com.perhab.bigdecimalchallenge;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -18,6 +19,11 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		public PerhabBigDecimalValue(List<Integer> givenData, int givenFloatingPointPosition) {
 			data = givenData;
 			decimalPlaces = givenFloatingPointPosition;
+		}
+		public PerhabBigDecimalValue(List<Integer> givenData, int givenFloatingPointPosition, boolean givenNegative) {
+			data = givenData;
+			decimalPlaces = givenFloatingPointPosition;
+			negative = givenNegative;
 		}
 		/**
 		 * holding the raw data of the decimal.
@@ -37,6 +43,11 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		@Override
 		public String toString(){
 			return new PerhabBigDecimal(this).toString();
+		}
+		
+		@Override
+		public PerhabBigDecimalValue clone() {
+			return new PerhabBigDecimalValue(new ArrayList<Integer>(data), decimalPlaces, negative);
 		}
 	}
 	
@@ -88,6 +99,22 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 	}
 	
 	public PerhabBigDecimal add(PerhabBigDecimal value) {
+		if(data.negative && value.data.negative) {
+			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) data.clone();
+			newData.negative = false;
+			PerhabBigDecimalValue newValue = (PerhabBigDecimalValue) data.clone();
+			newData.negative = false;
+			PerhabBigDecimal result = new PerhabBigDecimal(newValue).add(new PerhabBigDecimal(newData));
+			return result;
+		} else if(data.negative && !value.data.negative) {
+			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) data.clone();
+			newData.negative = false;
+			return value.subtract(new PerhabBigDecimal(newData));
+		} else if(!data.negative && value.data.negative) {
+			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) value.data.clone();
+			newData.negative = false;
+			return subtract(new PerhabBigDecimal(newData));
+		}
 		PerhabBigDecimalValue newData = new PerhabBigDecimalValue(new Vector<Integer>(), 0);
 		if(value.data.decimalPlaces > data.decimalPlaces) {
 			newData.decimalPlaces = value.data.decimalPlaces;
