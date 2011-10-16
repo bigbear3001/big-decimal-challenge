@@ -43,4 +43,12 @@ public class BigDecimalRI implements BigDecimal<BigDecimalRI> {
 	public String toString() {
 		return bd.stripTrailingZeros().toPlainString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof BigDecimalRI) {
+			return bd.equals(((BigDecimalRI) obj).bd);
+		}
+		return false;
+	}
 }
