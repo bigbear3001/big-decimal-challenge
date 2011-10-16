@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import bigdecimalchallenge.test.BigDecimalTest;
 import bigdecimalchallenge.test.Numbers;
+import bigdecimalchallenge.test.TestUtils;
 
 /**
  * This tests various data against an operation (add,divide,multiply,subtract).
@@ -22,6 +23,10 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	protected abstract void testOperation(String number1, String number2);
 	
+	protected void normalizeAndTest(String number1, String number2) {
+		testOperation(TestUtils.normalize(number1), TestUtils.normalize(number2));
+	}
+	
 	/**
 	 * test simple integers to digits
 	 */
@@ -29,7 +34,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	public void integers() {
 		for(int i = 0; i < Numbers.digits.length; i++) {
 			for(int j = 0; j < Numbers.oneToHundred.length; j++) {
-				testOperation(Numbers.digits[i], Numbers.oneToHundred[j]);
+				normalizeAndTest(Numbers.digits[i], Numbers.oneToHundred[j]);
 			}
 		}
 	}
@@ -40,7 +45,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	public void negativeIntegers() {
 		for(int i = 0; i < Numbers.digits.length; i++) {
 			for(int j = 0; j < Numbers.oneToHundred.length; j++) {
-				testOperation(Numbers.digits[i], "-" + Numbers.oneToHundred[j]);
+				normalizeAndTest(Numbers.digits[i], "-" + Numbers.oneToHundred[j]);
 			}
 		}
 	}
@@ -52,7 +57,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	public void negativeWithNegativeIntegers() {
 		for(int i = 0; i < Numbers.digits.length; i++) {
 			for(int j = 0; j < Numbers.oneToHundred.length; j++) {
-				testOperation("-" + Numbers.digits[i], "-" + Numbers.oneToHundred[j]);
+				normalizeAndTest("-" + Numbers.digits[i], "-" + Numbers.oneToHundred[j]);
 			}
 		}
 	}
@@ -66,7 +71,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 			for(int j = 0; j < Numbers.digits.length; j++) {
 				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
 					for(int l = 0; l < Numbers.oneToHundred.length; l++) {
-						testOperation(Numbers.digits[i] + "." + Numbers.digits[j], Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
+						normalizeAndTest(Numbers.digits[i] + "." + Numbers.digits[j], Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
 					}
 				}
 			}
@@ -82,7 +87,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 			for(int j = 0; j < Numbers.digits.length; j++) {
 				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
 					for(int l = 0; l < Numbers.oneToHundred.length; l++) {
-						testOperation(Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
+						normalizeAndTest(Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
 					}
 				}
 			}
@@ -98,7 +103,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 			for(int j = 0; j < Numbers.digits.length; j++) {
 				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
 					for(int l = 0; l < Numbers.oneToHundred.length; l++) {
-						testOperation("-" + Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
+						normalizeAndTest("-" + Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
 					}
 				}
 			}
@@ -113,7 +118,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 		for(int i = 0; i < Numbers.digits.length; i++) {
 			for(int j = 0; j < Numbers.digits.length; j++) {
 				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					testOperation(Numbers.digits[i] + "." + Numbers.digits[j], Numbers.oneToHundred[k]);
+					normalizeAndTest(Numbers.digits[i] + "." + Numbers.digits[j], Numbers.oneToHundred[k]);
 				}
 			}
 		}
@@ -127,7 +132,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 		for(int i = 0; i < Numbers.digits.length; i++) {
 			for(int j = 0; j < Numbers.digits.length; j++) {
 				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					testOperation(Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k]);
+					normalizeAndTest(Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k]);
 				}
 			}
 		}
@@ -141,7 +146,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 		for(int i = 0; i < Numbers.digits.length; i++) {
 			for(int j = 0; j < Numbers.digits.length; j++) {
 				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					testOperation(Numbers.oneToHundred[k], Numbers.digits[i] + "." + Numbers.digits[j]);
+					normalizeAndTest(Numbers.oneToHundred[k], Numbers.digits[i] + "." + Numbers.digits[j]);
 				}
 			}
 		}
@@ -155,7 +160,7 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 		for(int i = 0; i < Numbers.digits.length; i++) {
 			for(int j = 0; j < Numbers.digits.length; j++) {
 				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					testOperation(Numbers.oneToHundred[k], "-" + Numbers.digits[i] + "." + Numbers.digits[j]);
+					normalizeAndTest(Numbers.oneToHundred[k], "-" + Numbers.digits[i] + "." + Numbers.digits[j]);
 				}
 			}
 		}
