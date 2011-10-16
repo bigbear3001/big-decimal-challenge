@@ -116,41 +116,34 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 			newData.negative = false;
 			return subtract(new PerhabBigDecimal(newData));
 		}
-		PerhabBigDecimalValue newData = new PerhabBigDecimalValue(new Vector<Integer>(), 0);
+		int valueOffset = 0;
+		int dataOffset = 0;
 		if(value.data.decimalPlaces > data.decimalPlaces) {
-			newData.decimalPlaces = value.data.decimalPlaces;
+			dataOffset = value.data.decimalPlaces - data.decimalPlaces;
 		} else {
-			newData.decimalPlaces = data.decimalPlaces; 
+			valueOffset = data.decimalPlaces - value.data.decimalPlaces;
 		}
-		for(int i = 0; i < newData.decimalPlaces; i++) {
-			int placeValue = 0;
-			if(value.data.decimalPlaces > i) {
-				placeValue += value.data.data.get(i);
+		PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), value.data.decimalPlaces > data.decimalPlaces ? value.data.decimalPlaces : data.decimalPlaces);
+		boolean carry = false;
+		int places = Math.max(dataOffset + data.data.size(), valueOffset + value.data.data.size());
+		for(int i = 0; i < places; i++) {
+			int place = i < dataOffset || (i - dataOffset) >= data.data.size() ? 0 : data.data.get(i - dataOffset);
+			int add = i < valueOffset || (i - valueOffset) >= value.data.data.size() ? 0 : value.data.data.get(i - valueOffset);
+			if(carry) {
+				add += 1;
+				carry = false;
 			}
-			newData.data.add(placeValue);
+			place += add;
+			if(place >= BASE) {
+				place -= BASE;
+				carry = true;
+			}
+			newValue.data.add(place);
 		}
-		int carrier = 0;
-		for(int i = newData.decimalPlaces; i < value.data.data.size() || i < data.data.size(); i++) {
-			int placeValue = carrier;
-			carrier = 0;
-			int valueOffset = 0;
-			int dataOffset = 0;
-			if(value.data.data.size() > i) {
-				placeValue += value.data.data.get(i);
-			}
-			if(data.data.size() > i) {
-				placeValue += data.data.get(i);
-			}
-			if(placeValue >= BASE) {
-				carrier = 1;
-				placeValue -= BASE;
-			}
-			newData.data.add(placeValue);
+		if(carry) {
+			newValue.data.add(1);
 		}
-		if(carrier != 0) {
-			newData.data.add(carrier);
-		}
-		return new PerhabBigDecimal(newData);
+		return new PerhabBigDecimal(newValue);
 	}
 	
 	public PerhabBigDecimal subtract(PerhabBigDecimal value) {
