@@ -15,7 +15,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 	 * {@link PerhabBigDecimalValue} represents the value of {@link PerhabBigDecimal}.
 	 * @author bigbear3001
 	 */
-	private class PerhabBigDecimalValue {
+	private class PerhabBigDecimalValue implements Cloneable {
 		public PerhabBigDecimalValue(List<Integer> givenData, int givenFloatingPointPosition) {
 			data = givenData;
 			decimalPlaces = givenFloatingPointPosition;
@@ -225,6 +225,11 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 			return toString().equals(((PerhabBigDecimal) obj).toString());
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return data.data.hashCode();
 	}
 	
 	public String toString(){
