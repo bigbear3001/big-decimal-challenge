@@ -23,6 +23,7 @@ public class InitialisationTest extends BigDecimalTest {
 	 * @param numberString The number as string to test
 	 */
 	private void assertCreation(String numberString) {
+		numberString = TestUtils.normalize(numberString);
 		logger.debug("Testing big decimal creation of number \"{}\"", numberString);
 		
 		BigDecimal<Object> bigDecimal = number(numberString);
@@ -34,7 +35,7 @@ public class InitialisationTest extends BigDecimalTest {
 	 * 
 	 * @param positive If the integers should be positive or negative
 	 */
-	public void integer(boolean positive) {
+	public void testInteger(boolean positive) {
 		// digits, one to hundred
 		for(String number : Numbers.digits) {
 			if(!positive && number.equals("0")) {
@@ -57,11 +58,46 @@ public class InitialisationTest extends BigDecimalTest {
 	}
 	
 	/**
+	 * Tests for creating floating point Operations
+	 * 
+	 * @param positive If the numbers should be positive or negative
+	 */
+	public void testFloatingPoint(boolean positive) {
+		for(int i = 0; i < Numbers.digits.length; i++) {
+			for(int j = 0; j < Numbers.digits.length; j++) {
+				assertCreation((positive ? "" : "-") + Numbers.digits[i] + "." + Numbers.digits[j]);
+			}
+		}
+		
+		for(int k = 0; k < Numbers.oneToHundred.length; k++) {
+			for(int l = 0; l < Numbers.oneToHundred.length; l++) {
+				assertCreation((positive ? "" : "-") + Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
+			}
+		}
+	}
+	
+	/**
+	 * Tests for initializing positive floating points
+	 */
+	@Test
+	public void positiveFloatingPoint() {
+		testFloatingPoint(true);
+	}
+	
+	/**
+	 * Tests for initializing negative floating points
+	 */
+	@Test
+	public void negativeFloatingPoint() {
+		testFloatingPoint(false);
+	}
+	
+	/**
 	 * Tests initialization of positive integer values
 	 */
 	@Test
 	public void positiveInteger() {
-		integer(true);
+		testInteger(true);
 	}
 	
 	/**
@@ -69,6 +105,6 @@ public class InitialisationTest extends BigDecimalTest {
 	 */
 	@Test
 	public void negativeInteger() {
-		integer(false);
+		testInteger(false);
 	}
 }
