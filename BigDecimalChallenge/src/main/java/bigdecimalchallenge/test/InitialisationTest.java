@@ -2,6 +2,8 @@ package bigdecimalchallenge.test;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import bigdecimalchallenge.BigDecimal;
 
@@ -12,6 +14,8 @@ import bigdecimalchallenge.BigDecimal;
  */
 public class InitialisationTest extends BigDecimalTest {
 
+	final static Logger logger = LoggerFactory.getLogger(InitialisationTest.class);
+	
 	/**
 	 * Creates a big decimal from the given string and asserts that it is equal to the toString() output.
 	 * Provides a nice error message on failure.
@@ -19,6 +23,8 @@ public class InitialisationTest extends BigDecimalTest {
 	 * @param numberString The number as string to test
 	 */
 	private void assertCreation(String numberString) {
+		logger.debug("Testing big decimal creation of number \"{}\"", numberString);
+		
 		BigDecimal<Object> bigDecimal = number(numberString);
 		assertEquals("Creating number from String " + numberString + " doesn't equal number.toString()", numberString, bigDecimal.toString());
 	}
@@ -29,7 +35,6 @@ public class InitialisationTest extends BigDecimalTest {
 	 * @param positive If the integers should be positive or negative
 	 */
 	public void integer(boolean positive) {
-		
 		// digits, one to hundred
 		for(String number : Numbers.digits) {
 			if(!positive && number.equals("0")) {
