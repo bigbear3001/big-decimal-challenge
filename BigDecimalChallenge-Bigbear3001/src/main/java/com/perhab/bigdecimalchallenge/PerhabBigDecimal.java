@@ -153,6 +153,85 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		return new PerhabBigDecimal(newData);
 	}
 	
+	public PerhabBigDecimal subtract(PerhabBigDecimal value) {
+		if(data.negative && value.data.negative) {
+			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) data.clone();
+			newData.negative = false;
+			PerhabBigDecimalValue newValue = (PerhabBigDecimalValue) data.clone();
+			newData.negative = false;
+			PerhabBigDecimal result = new PerhabBigDecimal(newValue).subtract(new PerhabBigDecimal(newData));
+			if(result.data.negative) {
+				result.data.negative = false;
+			} else {
+				result.data.negative = true;
+			}
+			return result;
+		} else if(data.negative && !value.data.negative) {
+			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) data.clone();
+			newData.negative = false;
+			PerhabBigDecimal result = value.add(new PerhabBigDecimal(newData));
+			result.data.negative = true;
+			return result;
+		} else if(!data.negative && value.data.negative) {
+			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) value.data.clone();
+			newData.negative = false;
+			return add(new PerhabBigDecimal(newData));
+		} else if(data.data.size() == 1 && data.data.get(0) == 0) {
+			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) value.data.clone();
+			newData.negative = true;
+			return new PerhabBigDecimal(newData);
+		}
+		
+		int valueOffset = 0;
+		int dataOffset = 0;
+		if(value.data.decimalPlaces > data.decimalPlaces) {
+			dataOffset = value.data.decimalPlaces - data.decimalPlaces;
+		} else {
+			valueOffset = data.decimalPlaces - value.data.decimalPlaces;
+		}
+		PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), dataOffset > valueOffset ? dataOffset : valueOffset);
+		boolean carry = false;
+		int places = Math.max(dataOffset + data.data.size(), valueOffset + value.data.data.size());
+		for(int i = 0; i < places; i++) {
+			int place = i < dataOffset || (i - dataOffset) >= data.data.size() ? 0 : data.data.get(i - dataOffset);
+			int sub = i < valueOffset || (i - valueOffset) >= value.data.data.size() ? 0 : value.data.data.get(i - valueOffset);
+			if(carry) {
+				sub += 1;
+				carry = false;
+			}
+			if(place < sub) {
+				place += BASE;
+				carry = true;
+			}
+			place -= sub;
+			newValue.data.add(place);
+		}
+		//if we still have a carry bit we have to subtract the result from the next tenfold
+		if(carry) {
+			PerhabBigDecimal complement = new PerhabBigDecimal(Math.pow(BASE, newValue.data.size()) + "");
+			complement = complement.subtract(new PerhabBigDecimal(newValue));
+			complement.data.negative = true;
+			return complement;
+		}
+		return new PerhabBigDecimal(newValue);
+	}
+	public PerhabBigDecimal divide(PerhabBigDecimal value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public PerhabBigDecimal multiply(PerhabBigDecimal value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof PerhabBigDecimal){
+			return toString().equals(((PerhabBigDecimal) obj).toString());
+		}
+		return false;
+	}
+	
 	public String toString(){
 		stripTrailingZeros();
 		StringBuilder value = new StringBuilder();
@@ -179,18 +258,10 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 			place = data.data.get(0);
 		}
 		
+		place = data.data.get(data.data.size() - 1);
+		while (place == 0 && data.data.size() > 1) {
+			data.data.remove(data.data.size() - 1);
+			place = data.data.get(data.data.size() - 1);
+		}
 	}
-	public PerhabBigDecimal subtract(PerhabBigDecimal value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public PerhabBigDecimal divide(PerhabBigDecimal value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public PerhabBigDecimal multiply(PerhabBigDecimal value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }
