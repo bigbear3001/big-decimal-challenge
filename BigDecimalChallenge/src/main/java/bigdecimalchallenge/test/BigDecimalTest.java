@@ -1,5 +1,8 @@
 package bigdecimalchallenge.test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import bigdecimalchallenge.BigDecimal;
 
 /**
@@ -9,7 +12,6 @@ import bigdecimalchallenge.BigDecimal;
  * @author fgutmann
  */
 public class BigDecimalTest {
-	
 	/**
 	 * TestUtils that provide big decimal instances.
 	 */
