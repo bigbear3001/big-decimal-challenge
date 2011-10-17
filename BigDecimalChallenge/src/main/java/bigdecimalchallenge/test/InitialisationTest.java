@@ -23,7 +23,6 @@ public class InitialisationTest extends BigDecimalTest {
 	 * @param numberString The number as string to test
 	 */
 	private void assertCreation(String numberString) {
-		numberString = TestUtils.normalize(numberString);
 		logger.debug("Testing big decimal creation of number \"{}\"", numberString);
 		
 		BigDecimal<Object> bigDecimal = number(numberString);
