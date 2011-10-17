@@ -235,7 +235,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		if(carry != 0) {
 			newValue.data.add(carry);
 		}
-		// TODO Auto-generated method stub
+		newValue.negative = (data.negative != value.data.negative);
 		return new PerhabBigDecimal(newValue);
 	}
 	
