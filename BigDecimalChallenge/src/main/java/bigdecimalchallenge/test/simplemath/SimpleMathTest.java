@@ -11,6 +11,35 @@ import bigdecimalchallenge.test.Numbers;
  */
 public abstract class SimpleMathTest extends BigDecimalTest {
 
+	
+	/**
+	 * Scaling mode for the numbers.
+	 * @author bigbear3001
+	 *
+	 */
+	public static enum Mode {
+		/**
+		 * Generates numbers in the range arround {@link Long#MAX_VALUE} to test overflow of longs
+		 */
+		LONG(Long.MAX_VALUE / 100),
+		/**
+		 * Generates numbers in the range arround {@link Integer#MAX_VALUE} to test overflow of integers
+		 */
+		INTEGER((long) (Integer.MAX_VALUE / 10)),
+		/**
+		 * Generated numbers in the range between 0 and 100
+		 */
+		HUNDRED(1L);
+		
+		private Long value;
+		
+		Mode(Long givenValue) {
+			value = givenValue;
+		}
+	};
+
+	private static Mode mode = Mode.HUNDRED;
+	
 	public SimpleMathTest() {
 		super();
 	}
@@ -27,9 +56,9 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void integers() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.oneToHundred.length; j++) {
-				testOperation(Numbers.digits[i], Numbers.oneToHundred[j]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intOneToHundred.length; j++) {
+				testOperation("" + Numbers.intDigits[i] * mode.value, "" + Numbers.intOneToHundred[j] * mode.value);
 			}
 		}
 	}
@@ -38,9 +67,9 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void negativeIntegers() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.oneToHundred.length; j++) {
-				testOperation(Numbers.digits[i], "-" + Numbers.oneToHundred[j]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intOneToHundred.length; j++) {
+				testOperation("" + Numbers.intDigits[i] * mode.value, "-" + Numbers.intOneToHundred[j] * mode.value);
 			}
 		}
 	}
@@ -50,9 +79,9 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void negativeWithNegativeIntegers() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.oneToHundred.length; j++) {
-				testOperation("-" + Numbers.digits[i], "-" + Numbers.oneToHundred[j]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intOneToHundred.length; j++) {
+				testOperation("-" + Numbers.intDigits[i] * mode.value, "-" + Numbers.intOneToHundred[j] * mode.value);
 			}
 		}
 	}
@@ -62,11 +91,11 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void doubles() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.digits.length; j++) {
-				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					for(int l = 0; l < Numbers.oneToHundred.length; l++) {
-						testOperation(Numbers.digits[i] + "." + Numbers.digits[j], Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intDigits.length; j++) {
+				for(int k = 0; k < Numbers.intOneToHundred.length; k++) {
+					for(int l = 0; l < Numbers.intOneToHundred.length; l++) {
+						testOperation(Numbers.intDigits[i] * mode.value + "." + Numbers.intDigits[j] * mode.value, Numbers.intOneToHundred[k] * mode.value + "." + Numbers.intOneToHundred[l] * mode.value);
 					}
 				}
 			}
@@ -78,11 +107,11 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void negativeDoubles() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.digits.length; j++) {
-				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					for(int l = 0; l < Numbers.oneToHundred.length; l++) {
-						testOperation(Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intDigits.length; j++) {
+				for(int k = 0; k < Numbers.intOneToHundred.length; k++) {
+					for(int l = 0; l < Numbers.intOneToHundred.length; l++) {
+						testOperation(Numbers.intDigits[i] * mode.value + "." + Numbers.intDigits[j] * mode.value, "-" + Numbers.intOneToHundred[k] * mode.value + "." + Numbers.intOneToHundred[l] * mode.value);
 					}
 				}
 			}
@@ -94,11 +123,11 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void negativeWithNegativeDoubles() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.digits.length; j++) {
-				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					for(int l = 0; l < Numbers.oneToHundred.length; l++) {
-						testOperation("-" + Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k] + "." + Numbers.oneToHundred[l]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intDigits.length; j++) {
+				for(int k = 0; k < Numbers.intOneToHundred.length; k++) {
+					for(int l = 0; l < Numbers.intOneToHundred.length; l++) {
+						testOperation("-" + Numbers.intDigits[i] * mode.value + "." + Numbers.intDigits[j] * mode.value, "-" + Numbers.intOneToHundred[k] * mode.value + "." + Numbers.intOneToHundred[l] * mode.value);
 					}
 				}
 			}
@@ -110,10 +139,10 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void integersToDoubles() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.digits.length; j++) {
-				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					testOperation(Numbers.digits[i] + "." + Numbers.digits[j], Numbers.oneToHundred[k]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intDigits.length; j++) {
+				for(int k = 0; k < Numbers.intOneToHundred.length; k++) {
+					testOperation(Numbers.intDigits[i] * mode.value + "." + Numbers.intDigits[j] * mode.value, "" + Numbers.intOneToHundred[k] * mode.value);
 				}
 			}
 		}
@@ -124,10 +153,10 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void negativeIntegersToDoubles() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.digits.length; j++) {
-				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					testOperation(Numbers.digits[i] + "." + Numbers.digits[j], "-" + Numbers.oneToHundred[k]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intDigits.length; j++) {
+				for(int k = 0; k < Numbers.intOneToHundred.length; k++) {
+					testOperation(Numbers.intDigits[i] * mode.value + "." + Numbers.intDigits[j] * mode.value, "-" + Numbers.intOneToHundred[k] * mode.value);
 				}
 			}
 		}
@@ -138,10 +167,10 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void doublesToIntegers() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.digits.length; j++) {
-				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					testOperation(Numbers.oneToHundred[k], Numbers.digits[i] + "." + Numbers.digits[j]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intDigits.length; j++) {
+				for(int k = 0; k < Numbers.intOneToHundred.length; k++) {
+					testOperation("" + Numbers.intOneToHundred[k] * mode.value, Numbers.intDigits[i] * mode.value + "." + Numbers.intDigits[j] * mode.value);
 				}
 			}
 		}
@@ -152,12 +181,21 @@ public abstract class SimpleMathTest extends BigDecimalTest {
 	 */
 	@Test
 	public void negativeDoublesToIntegers() {
-		for(int i = 0; i < Numbers.digits.length; i++) {
-			for(int j = 0; j < Numbers.digits.length; j++) {
-				for(int k = 0; k < Numbers.oneToHundred.length; k++) {
-					testOperation(Numbers.oneToHundred[k], "-" + Numbers.digits[i] + "." + Numbers.digits[j]);
+		for(int i = 0; i < Numbers.intDigits.length; i++) {
+			for(int j = 0; j < Numbers.intDigits.length; j++) {
+				for(int k = 0; k < Numbers.intOneToHundred.length; k++) {
+					testOperation("" + Numbers.intOneToHundred[k] * mode.value, "-" + Numbers.intDigits[i] * mode.value + "." + Numbers.intDigits[j] * mode.value);
 				}
 			}
 		}
+	}
+
+	/**
+	 * set the scaling mode for the numbers
+	 * @param newMode - scaling to set for the numbers
+	 * @see Mode
+	 */
+	public static void mode(Mode newMode) {
+		mode = newMode;
 	}
 }
