@@ -203,7 +203,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		}
 		//if we still have a carry bit we have to subtract the result from the next tenfold
 		if(carry) {
-			PerhabBigDecimal complement = new PerhabBigDecimal(new Double(Math.pow(BASE, places - newValue.decimalPlaces)).longValue() + "");
+			PerhabBigDecimal complement = new PerhabBigDecimal(((long) Math.pow(BASE, places - newValue.decimalPlaces)) + "");
 			complement = complement.subtract(new PerhabBigDecimal(newValue));
 			complement.data.negative = true;
 			return complement;
