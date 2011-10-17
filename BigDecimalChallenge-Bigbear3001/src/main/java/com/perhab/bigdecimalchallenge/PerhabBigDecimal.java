@@ -215,9 +215,13 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		return null;
 	}
 	public PerhabBigDecimal multiply(PerhabBigDecimal value) {
-		PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), 0);
-		int carry = 0;
+		if(isZero() || value.isZero()) {
+			return new PerhabBigDecimal();
+		}
+		PerhabBigDecimal result = new PerhabBigDecimal();
 		for(int i = 0; i < data.data.size(); i++) {
+			PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), 0);
+			int carry = 0;
 			for(int j = 0; j < value.data.data.size(); j++) {
 				int place = data.data.get(i);
 				place *= value.data.data.get(j);
@@ -231,12 +235,18 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 				}
 				newValue.data.add(place);
 			}
+			if(carry != 0) {
+				newValue.data.add(carry);
+			}
+			for(int j = 0; j < i; j++) {
+				newValue.data.add(0,0);
+			}
+			result = result.add(new PerhabBigDecimal(newValue));
 		}
-		if(carry != 0) {
-			newValue.data.add(carry);
-		}
-		newValue.negative = (data.negative != value.data.negative);
-		return new PerhabBigDecimal(newValue);
+		
+		result.data.negative = (data.negative != value.data.negative);
+		result.data.decimalPlaces = value.data.decimalPlaces + data.decimalPlaces;
+		return result;
 	}
 	
 	@Override
@@ -257,6 +267,9 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		StringBuilder value = new StringBuilder();
 		if(data.negative) {
 			value.append('-');
+		}
+		if (data.decimalPlaces == data.data.size()) {
+			value.append("0.");
 		}
 		for(int i = data.data.size() -1 ; i >= 0; i--) {
 			value.append(data.data.get(i));
