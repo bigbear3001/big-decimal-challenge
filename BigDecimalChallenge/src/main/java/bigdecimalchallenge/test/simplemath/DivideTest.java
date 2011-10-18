@@ -1,10 +1,8 @@
 package bigdecimalchallenge.test.simplemath;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.fail;
 
-import org.hamcrest.Matcher;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,15 +18,7 @@ import bigdecimalchallenge.test.TestUtils;
 public class DivideTest extends SimpleMathTest {
 	
 	final static Logger logger = LoggerFactory.getLogger(DivideTest.class);
-	
-	/**
-	 * We prepare to get an Arithmetic Exception when dividing by zero or getting a periodical result as with 1/9.
-	 * !Important: don't overload this with ExpectedException.none() when running tests as the framework holds a reference to the initial ExpectedException.
-	 * Instead use thrown.expect((Matcher<Object>) null) to reset the ExpectedException.
-	 */
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
+
 	/**
 	 * Helper method to divide the two numbers and compare the result to the java big decimal
 	 * @param number1 - first number serves as base
@@ -46,22 +36,21 @@ public class DivideTest extends SimpleMathTest {
 		//then we will have to modify this test to check for this (e.g. implementation.canHandlePeriodicalResults())
 		//of course than we would have to find another way to verify the result.
 		if(number2.matches("^(0\\.|\\.)0*$")) {
-			thrown.expect(ArithmeticException.class);
 			exceptionExpected = true;
 		} else {
 			try {
 				expected = new java.math.BigDecimal(number1).divide(new java.math.BigDecimal(number2));
-				thrown.expect((Matcher<Object>) null);
 			} catch (ArithmeticException e) {
-				thrown.expect(ArithmeticException.class);
 				exceptionExpected=true;
 			}
-			
 		}
-		BigDecimal<Object> result = number(number1).divide(number(number2));
-		if(exceptionExpected) {
-			fail("We expect te division by zero (" + number1 + " / " + number2 + ") to fail with an ArithmeticExcpetion.");
+		try {
+			BigDecimal<Object> result = number(number1).divide(number(number2));
+			assertEquals("The implementation doesn't match the result of the java big decimal calculation (" + number1 + " / " + number2 + ")", TestUtils.toBigDecimalString(expected), result.toString());
+		} catch (ArithmeticException e) {
+			if(!exceptionExpected) {
+				fail("We didn't expect the operation (" + number1 + " / " + number2 + ") to fail with this exception.\r\n" + e.getMessage());
+			}
 		}
-		assertEquals("The implementation doesn't match the result of the java big decimal calculation (" + number1 + " / " + number2 + ")", TestUtils.toBigDecimalString(expected), result.toString());
 	}
 }
