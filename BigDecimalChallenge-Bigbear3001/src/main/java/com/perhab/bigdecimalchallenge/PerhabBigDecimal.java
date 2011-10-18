@@ -9,13 +9,13 @@ import java.util.Vector;
 import bigdecimalchallenge.BigDecimal;
 import bigdecimalchallenge.InvalidNumberFormatException;
 
-public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal>, Comparable<PerhabBigDecimal> {
+public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal> implements BigDecimal<PerhabBigDecimal> {
 
 	/**
 	 * {@link PerhabBigDecimalValue} represents the value of {@link PerhabBigDecimal}.
 	 * @author bigbear3001
 	 */
-	private class PerhabBigDecimalValue implements Cloneable {
+	private class PerhabBigDecimalValue extends AbstractPerhabComparable<PerhabBigDecimalValue> implements Cloneable {
 		public PerhabBigDecimalValue(List<Integer> givenData, int givenFloatingPointPosition) {
 			data = givenData;
 			decimalPlaces = givenFloatingPointPosition;
@@ -48,6 +48,42 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal>, Comparabl
 		@Override
 		public PerhabBigDecimalValue clone() {
 			return new PerhabBigDecimalValue(new ArrayList<Integer>(data), decimalPlaces, negative);
+		}
+		public int compareTo(PerhabBigDecimalValue value) {
+			if(negative && !value.negative) {
+				return -1;
+			} else if(!negative && value.negative) {
+				return 1;
+			}
+			int negativeCorrection = negative ? -1 : 1;
+			if(data.size() - decimalPlaces > value.data.size() - value.decimalPlaces) {
+				//We have more places before the decimal point
+				return 1 * negativeCorrection;
+			} else if (data.size() - decimalPlaces < value.data.size() - value.decimalPlaces) {
+				//we have less places before the decimal point
+				return -1 * negativeCorrection;
+			}
+			int numberOffset = value.data.size() - data.size();
+			for(int i = data.size() - 1 ; i >= 0; i--) {
+				if(i + numberOffset < 0) {
+					return 1 * negativeCorrection;
+				}
+				int dataPlace = data.get(i);
+				int numberPlace = value.data.get(i + numberOffset);
+				if(dataPlace > numberPlace) {
+					return 1 * negativeCorrection;
+				} else if (dataPlace < numberPlace) {
+					return -1 * negativeCorrection;
+				}
+			}
+			if(data.size() < value.data.size()) {
+				return -1 * negativeCorrection;
+			}
+			return 0;
+		}
+		@Override
+		public int hashCode() {
+			return data.hashCode();
 		}
 	}
 	
@@ -252,16 +288,8 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal>, Comparabl
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof PerhabBigDecimal){
-			return compareTo((PerhabBigDecimal) obj) == 0;
-		}
-		return false;
-	}
-	
-	@Override
 	public int hashCode() {
-		return data.data.hashCode();
+		return data.hashCode();
 	}
 	
 	public String toString(){
@@ -327,35 +355,6 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal>, Comparabl
 	}
 
 	public int compareTo(PerhabBigDecimal number) {
-		if(data.negative && !number.data.negative) {
-			return -1;
-		} else if(!data.negative && number.data.negative) {
-			return 1;
-		}
-		int negativeCorrection = data.negative ? -1 : 1;
-		if(data.data.size() - data.decimalPlaces > number.data.data.size() - number.data.decimalPlaces) {
-			//We have more places before the decimal point
-			return 1 * negativeCorrection;
-		} else if (data.data.size() - data.decimalPlaces < number.data.data.size() - number.data.decimalPlaces) {
-			//we have less places before the decimal point
-			return -1 * negativeCorrection;
-		}
-		int numberOffset = number.data.data.size() - data.data.size();
-		for(int i = data.data.size() - 1 ; i >= 0; i--) {
-			if(i + numberOffset < 0) {
-				return 1 * negativeCorrection;
-			}
-			int dataPlace = data.data.get(i);
-			int numberPlace = number.data.data.get(i + numberOffset);
-			if(dataPlace > numberPlace) {
-				return 1 * negativeCorrection;
-			} else if (dataPlace < numberPlace) {
-				return -1 * negativeCorrection;
-			}
-		}
-		if(data.data.size() < number.data.data.size()) {
-			return -1 * negativeCorrection;
-		}
-		return 0;
+		return data.compareTo(number.data);
 	}
 }
