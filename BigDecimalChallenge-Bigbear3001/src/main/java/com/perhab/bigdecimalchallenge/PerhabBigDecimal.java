@@ -9,7 +9,7 @@ import java.util.Vector;
 import bigdecimalchallenge.BigDecimal;
 import bigdecimalchallenge.InvalidNumberFormatException;
 
-public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
+public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal>, Comparable<PerhabBigDecimal> {
 
 	/**
 	 * {@link PerhabBigDecimalValue} represents the value of {@link PerhabBigDecimal}.
@@ -211,8 +211,10 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 		return new PerhabBigDecimal(newValue);
 	}
 	public PerhabBigDecimal divide(PerhabBigDecimal value) {
-		// TODO Auto-generated method stub
-		return null;
+		if(value.isZero()) {
+			throw new ArithmeticException("Division by zero");
+		}
+		return new PerhabBigDecimal();
 	}
 	public PerhabBigDecimal multiply(PerhabBigDecimal value) {
 		if(isZero() || value.isZero()) {
@@ -252,7 +254,7 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof PerhabBigDecimal){
-			return toString().equals(((PerhabBigDecimal) obj).toString());
+			return compareTo((PerhabBigDecimal) obj) == 0;
 		}
 		return false;
 	}
@@ -314,5 +316,46 @@ public class PerhabBigDecimal implements BigDecimal<PerhabBigDecimal> {
 	}
 	private boolean isNegative() {
 		return data.negative;
+	}
+	
+	public boolean largerThan(PerhabBigDecimal number) {
+		return compareTo(number) == 1;
+	}
+	
+	public boolean smallerThan(PerhabBigDecimal number) {
+		return compareTo(number) == -1;
+	}
+
+	public int compareTo(PerhabBigDecimal number) {
+		if(data.negative && !number.data.negative) {
+			return -1;
+		} else if(!data.negative && number.data.negative) {
+			return 1;
+		}
+		int negativeCorrection = data.negative ? -1 : 1;
+		if(data.data.size() - data.decimalPlaces > number.data.data.size() - number.data.decimalPlaces) {
+			//We have more places before the decimal point
+			return 1 * negativeCorrection;
+		} else if (data.data.size() - data.decimalPlaces < number.data.data.size() - number.data.decimalPlaces) {
+			//we have less places before the decimal point
+			return -1 * negativeCorrection;
+		}
+		int numberOffset = number.data.data.size() - data.data.size();
+		for(int i = data.data.size() - 1 ; i >= 0; i--) {
+			if(i + numberOffset < 0) {
+				return 1 * negativeCorrection;
+			}
+			int dataPlace = data.data.get(i);
+			int numberPlace = number.data.data.get(i + numberOffset);
+			if(dataPlace > numberPlace) {
+				return 1 * negativeCorrection;
+			} else if (dataPlace < numberPlace) {
+				return -1 * negativeCorrection;
+			}
+		}
+		if(data.data.size() < number.data.data.size()) {
+			return -1 * negativeCorrection;
+		}
+		return 0;
 	}
 }
