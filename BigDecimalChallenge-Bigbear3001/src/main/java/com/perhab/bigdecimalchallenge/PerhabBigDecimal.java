@@ -246,12 +246,7 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		}
 		return new PerhabBigDecimal(newValue);
 	}
-	public PerhabBigDecimal divide(PerhabBigDecimal value) {
-		if(value.isZero()) {
-			throw new ArithmeticException("Division by zero");
-		}
-		return new PerhabBigDecimal();
-	}
+
 	public PerhabBigDecimal multiply(PerhabBigDecimal value) {
 		if(isZero() || value.isZero()) {
 			return new PerhabBigDecimal();
@@ -285,6 +280,19 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		result.data.negative = (data.negative != value.data.negative);
 		result.data.decimalPlaces = value.data.decimalPlaces + data.decimalPlaces;
 		return result;
+	}
+	
+	public PerhabBigDecimal divide(PerhabBigDecimal value) {
+		if(value.isZero()) {
+			throw new ArithmeticException("Division by zero");
+		}
+		PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), 0);
+		ArrayList<Integer> buffer = new ArrayList<Integer>();
+		for(int i = 0; i < data.data.size(); i++) {
+			
+		}
+		
+		return new PerhabBigDecimal();
 	}
 	
 	@Override
@@ -346,14 +354,6 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		return data.negative;
 	}
 	
-	public boolean largerThan(PerhabBigDecimal number) {
-		return compareTo(number) == 1;
-	}
-	
-	public boolean smallerThan(PerhabBigDecimal number) {
-		return compareTo(number) == -1;
-	}
-
 	public int compareTo(PerhabBigDecimal number) {
 		return data.compareTo(number.data);
 	}

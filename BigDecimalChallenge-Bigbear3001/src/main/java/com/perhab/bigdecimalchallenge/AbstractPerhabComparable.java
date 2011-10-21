@@ -2,8 +2,6 @@ package com.perhab.bigdecimalchallenge;
 
 public abstract class AbstractPerhabComparable<T> implements Comparable<T> {
 
-	public T clazz;
-	
 	public abstract int compareTo(T o);
 	
 	public abstract int hashCode();
