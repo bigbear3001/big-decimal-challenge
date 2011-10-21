@@ -136,6 +136,9 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		validate();
 	}
 
+	private PerhabBigDecimal(int number) {
+		data = new PerhabBigDecimalValue(Arrays.asList(new Integer[]{number}), 0);
+	}
 	public PerhabBigDecimal add(PerhabBigDecimal value) {
 		if(data.negative && value.data.negative) {
 			PerhabBigDecimalValue newData = (PerhabBigDecimalValue) data.clone();
@@ -250,7 +253,27 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		if(value.isZero()) {
 			throw new ArithmeticException("Division by zero");
 		}
+		PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), 0);
+		PerhabBigDecimal stack = new PerhabBigDecimal(data.clone());
+		PerhabBigDecimal buffer = new PerhabBigDecimal();
+		PerhabBigDecimal firstPlace = new PerhabBigDecimal(value.data.data.get(value.data.data.size() -1));
+		for(int i = data.data.size() - 1; i >= 0 && !stack.isZero(); i--) {
+			buffer.data.data.add(0, data.data.get(i));
+			int guess = guessDivision(buffer, firstPlace);
+			PerhabBigDecimal result = value.multiply(new PerhabBigDecimal(guess));
+			stack = stack.subtract(result);
+			newValue.data.add(guess);
+		}
 		return new PerhabBigDecimal();
+	}
+	private int guessDivision(PerhabBigDecimal buffer,
+			PerhabBigDecimal firstPlace) {
+		for(int i = 1; i < BASE; i++) {
+			if(!firstPlace.multiply(new PerhabBigDecimal(i)).smallerThan(buffer)) {
+				return i - 1;
+			}
+		}
+		throw new RuntimeException("There is something wrong with the implementation!");
 	}
 	public PerhabBigDecimal multiply(PerhabBigDecimal value) {
 		if(isZero() || value.isZero()) {
