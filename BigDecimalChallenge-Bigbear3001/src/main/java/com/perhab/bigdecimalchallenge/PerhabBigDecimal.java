@@ -295,7 +295,7 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 					LOGGER.trace("           - {} ({} * {})", new Object[]{result, value, guess});
 					stack = stack.subtract(result);
 					LOGGER.trace("           = {}", stack);
-					newValue.data.add(guess);
+					newValue.data.add(0, guess);
 					buffer = new PerhabBigDecimal(new PerhabBigDecimalValue(new ArrayList<Integer>(), 0));
 					i = stack.data.data.size() - 1;
 					guessCorrection = 0;
