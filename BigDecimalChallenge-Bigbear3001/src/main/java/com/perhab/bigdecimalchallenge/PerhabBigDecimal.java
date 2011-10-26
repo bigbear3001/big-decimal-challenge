@@ -279,7 +279,11 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 			LOGGER.trace("Stack: {}", stack);
 			PerhabBigDecimal firstPlaces = getFirstPlaces(value, guessPlaces);
 			if(guessCorrection == 0) {
-				buffer.data.data.add(0, stack.data.data.get(i));
+				if(i < 0) {
+					buffer.data.data.add(0, 0);
+				} else {
+					buffer.data.data.add(0, stack.data.data.get(i));
+				}
 				LOGGER.trace("Buffer: {}", buffer);
 			}
 			int guess = guessDivision(buffer, firstPlaces) - guessCorrection;
@@ -288,9 +292,15 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 				i--;
 			} else {
 				PerhabBigDecimal result = value.multiply(new PerhabBigDecimal(guess));
-				int placesOff = stack.data.data.size() - result.data.data.size() + (1 - guessPlaces) ;
-				PerhabBigDecimal corrector = PerhabBigDecimal.BASE_DECIMAL.power(new PerhabBigDecimal(placesOff));
-				result = result.multiply(corrector);
+				int placesOff = stack.data.data.size() - result.data.data.size() + (1 - guessPlaces);
+				if(placesOff > 0) {
+					PerhabBigDecimal corrector = PerhabBigDecimal.BASE_DECIMAL.power(new PerhabBigDecimal(placesOff));
+					result = result.multiply(corrector);
+				} else if (placesOff < 0) {
+					PerhabBigDecimal corrector = PerhabBigDecimal.BASE_DECIMAL.power(new PerhabBigDecimal(placesOff * -1));
+					stack = stack.multiply(corrector);
+					newValue.decimalPlaces++;
+				}
 				if(!result.largerThan(stack)){
 					LOGGER.trace("           - {} ({} * {})", new Object[]{result, value, guess});
 					stack = stack.subtract(result);
@@ -309,6 +319,7 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 						LOGGER.trace("Additionally the guess is already 1 so i'm taking the next guess with more places");
 						guessPlaces++;
 						buffer = new PerhabBigDecimal(new PerhabBigDecimalValue(new ArrayList<Integer>(), 0));
+						i = stack.data.data.size() - 1;
 					}
 				}
 			}
@@ -318,7 +329,7 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 	}
 	private PerhabBigDecimal getFirstPlaces(PerhabBigDecimal value, int places) {
 		PerhabBigDecimalValue result = new PerhabBigDecimalValue(new ArrayList<Integer>(places), 0);
-		for (int i = 0; i < places; i++) {
+		for (int i = 0; i < places && i < value.data.data.size(); i++) {
 			result.data.add(0, value.data.data.get(value.data.data.size() - 1 - i));
 		}
 		return new PerhabBigDecimal(result);
@@ -386,7 +397,10 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 			value.append('-');
 		}
 		if (data.decimalPlaces == data.data.size()) {
-			value.append("0.");
+			value.append('0');
+			if(data.data.size() != 0) {
+				value.append('.');
+			}
 		}
 		for(int i = data.data.size() -1 ; i >= 0; i--) {
 			value.append(data.data.get(i));
