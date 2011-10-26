@@ -2,6 +2,7 @@ package com.perhab.bigdecimalchallenge;
 
 import static junit.framework.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class MyTests {
@@ -34,5 +35,13 @@ public class MyTests {
 		PerhabBigDecimal a = new PerhabBigDecimal("7604916");
 		PerhabBigDecimal b = new PerhabBigDecimal("110");
 		assertEquals("69135.6", a.divide(b).toString());
+	}
+	
+	
+	@Test
+	public void testDivide5() {
+		PerhabBigDecimal a = new PerhabBigDecimal("0.1");
+		PerhabBigDecimal b = new PerhabBigDecimal("10");
+		assertEquals("0.01", a.divide(b).toString());
 	}
 }
