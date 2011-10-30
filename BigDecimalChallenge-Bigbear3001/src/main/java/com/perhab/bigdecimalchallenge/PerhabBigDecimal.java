@@ -268,8 +268,18 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 			throw new ArithmeticException("Division by zero");
 		}
 		LOGGER.debug("Dividing {} by {}", new Object[]{this, value});
+		
 		PerhabBigDecimalValue newValue = new PerhabBigDecimalValue(new ArrayList<Integer>(), 0);
+		newValue.decimalPlaces = data.decimalPlaces;
 		PerhabBigDecimal stack = new PerhabBigDecimal(data.clone());
+		stack.data.decimalPlaces = 0;
+		stack.data.negative = false;
+		stack.stripTrailingZeros();
+		PerhabBigDecimal divValue = value.clone();
+		divValue.data.decimalPlaces = 0;
+		divValue.data.negative = false;
+		
+		
 		int i = stack.data.data.size() - 1;
 		int currentPlace = 0;
 		PerhabBigDecimal buffer = new PerhabBigDecimal(new PerhabBigDecimalValue(new ArrayList<Integer>(), 0));
@@ -277,7 +287,7 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		int guessPlaces = 1;
 		while(!stack.isZero()) {
 			LOGGER.trace("Stack: {}", stack);
-			PerhabBigDecimal firstPlaces = getFirstPlaces(value, guessPlaces);
+			PerhabBigDecimal firstPlaces = getFirstPlaces(divValue, guessPlaces);
 			if(guessCorrection == 0) {
 				if(i < 0) {
 					buffer.data.data.add(0, 0);
@@ -291,7 +301,7 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 			if(guess == 0){
 				i--;
 			} else {
-				PerhabBigDecimal result = value.multiply(new PerhabBigDecimal(guess));
+				PerhabBigDecimal result = divValue.multiply(new PerhabBigDecimal(guess));
 				int placesOff = stack.data.data.size() - result.data.data.size() + (1 - guessPlaces);
 				if(placesOff > 0) {
 					PerhabBigDecimal corrector = PerhabBigDecimal.BASE_DECIMAL.power(new PerhabBigDecimal(placesOff));
@@ -302,7 +312,7 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 					newValue.decimalPlaces++;
 				}
 				if(!result.largerThan(stack)){
-					LOGGER.trace("           - {} ({} * {})", new Object[]{result, value, guess});
+					LOGGER.trace("           - {} ({} * {})", new Object[]{result, divValue, guess});
 					stack = stack.subtract(result);
 					LOGGER.trace("           = {}", stack);
 					newValue.data.add(0, guess);
@@ -312,10 +322,10 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 					guessPlaces = 1;
 				} else {
 					if(guess > 1) {
-						LOGGER.trace("The result {} of the guess {} multiplied by the divisor {} is to large reducing the guess by one and try again.", new Object[]{result, guess, value});
+						LOGGER.trace("The result {} of the guess {} multiplied by the divisor {} is to large reducing the guess by one and try again.", new Object[]{result, guess, divValue});
 						guessCorrection++;
 					} else {
-						LOGGER.trace("The result {} of the guess {} multiplied by the divisor {} is to large reducing the guess by one and try again.", new Object[]{result, guess, value});
+						LOGGER.trace("The result {} of the guess {} multiplied by the divisor {} is to large reducing the guess by one and try again.", new Object[]{result, guess, divValue});
 						LOGGER.trace("Additionally the guess is already 1 so i'm taking the next guess with more places");
 						guessPlaces++;
 						buffer = new PerhabBigDecimal(new PerhabBigDecimalValue(new ArrayList<Integer>(), 0));
@@ -396,10 +406,13 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		if(data.negative) {
 			value.append('-');
 		}
-		if (data.decimalPlaces == data.data.size()) {
+		if (data.decimalPlaces >= data.data.size()) {
 			value.append('0');
 			if(data.data.size() != 0) {
 				value.append('.');
+			}
+			for(int i = 0; i < data.decimalPlaces - data.data.size(); i++) {
+				value.append('0');
 			}
 		}
 		for(int i = data.data.size() -1 ; i >= 0; i--) {
