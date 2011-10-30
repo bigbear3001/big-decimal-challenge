@@ -57,9 +57,6 @@ public class TestUtils<T> {
 	 */
 	public static String normalize(String number) {
 		String result = toBigDecimalString(new java.math.BigDecimal(number));
-		if(!result.equals(number)) {
-			System.out.println("normalized " + number + " to " + result);
-		}
 		return result;
 	}
 	
