@@ -86,7 +86,12 @@ public class CopyTest extends BigDecimalTest {
 	@SuppressWarnings("unchecked")
 	private Method getMethod(String methodName) throws SecurityException, NoSuchMethodException {
 		Class<? extends BigDecimal> clazz = number("0").getClass();
-		return clazz.getMethod(methodName, clazz);
+		if (methodName == "divide") {
+			Class<?> clazzInt = int.class;
+			return clazz.getMethod(methodName, clazz, clazzInt);
+		} else {
+			return clazz.getMethod(methodName, clazz);
+		}
 	}
 
 	/**
@@ -102,7 +107,12 @@ public class CopyTest extends BigDecimalTest {
 				try{
 					BigDecimal<Object> a = number(Numbers.digits[i]);
 					BigDecimal<Object> b = number(Numbers.oneToHundred[j]);
-					Object c = method.invoke(a, b);
+					Object c;
+					if(method.getName() == "divide") {
+						c = method.invoke(a, b, 100);
+					} else {
+						c = method.invoke(a, b);
+					}
 					assertNotSame("initialisation shoul not return the same object for " + a + " and " + b + ".", a, b);
 					assertNotSame("the " + method.getName() + " operation should generate a new object with each call.", a, c);
 					assertNotSame("the " + method.getName() + " operation should generate a new object with each call.", b, c);

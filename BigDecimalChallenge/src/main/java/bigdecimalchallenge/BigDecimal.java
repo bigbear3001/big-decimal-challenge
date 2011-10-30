@@ -64,9 +64,14 @@ public interface BigDecimal<T> {
 	/**
 	 * divide this big decimal by a big decimal.
 	 * @param value - value to divide this big decimal by
+	 * @param scale - defines the number of decimal places to calculate the number to any places below have to be rounded in the following mode:
+	 * <ul>
+	 *  <li> 1.divide(9, 2) results in 0.33</li>
+	 *  <li> 2.divide(9, 2) results in 0.67</li>
+	 * </ul>
 	 * @return new big decimal with the added values of this big decimal and the given big decimal
 	 */
-	public BigDecimal<T> divide(T value);
+	public BigDecimal<T> divide(T value, int scale);
 	
 	/**
 	 * multiply this big decimal with another big decimal

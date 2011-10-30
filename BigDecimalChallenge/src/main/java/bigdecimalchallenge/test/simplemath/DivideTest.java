@@ -39,13 +39,13 @@ public class DivideTest extends SimpleMathTest {
 			exceptionExpected = true;
 		} else {
 			try {
-				expected = new java.math.BigDecimal(number1).divide(new java.math.BigDecimal(number2));
+				expected = new java.math.BigDecimal(number1).divide(new java.math.BigDecimal(number2), 100, java.math.RoundingMode.HALF_UP);
 			} catch (ArithmeticException e) {
 				exceptionExpected=true;
 			}
 		}
 		try {
-			BigDecimal<Object> result = number(number1).divide(number(number2));
+			BigDecimal<Object> result = number(number1).divide(number(number2), 100);
 			assertEquals("The implementation doesn't match the result of the java big decimal calculation (" + number1 + " / " + number2 + ")", TestUtils.toBigDecimalString(expected), result.toString());
 		} catch (ArithmeticException e) {
 			if(!exceptionExpected) {

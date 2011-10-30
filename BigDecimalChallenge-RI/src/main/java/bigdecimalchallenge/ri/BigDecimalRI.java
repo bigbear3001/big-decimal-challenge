@@ -1,5 +1,7 @@
 package bigdecimalchallenge.ri;
 
+import java.math.RoundingMode;
+
 import bigdecimalchallenge.BigDecimal;
 
 /**
@@ -30,8 +32,8 @@ public class BigDecimalRI implements BigDecimal<BigDecimalRI> {
 	}
 
 	@Override
-	public BigDecimalRI divide(BigDecimalRI value) {
-		return new BigDecimalRI(bd.divide(value.bd));
+	public BigDecimalRI divide(BigDecimalRI value, int scale) {
+		return new BigDecimalRI(bd.divide(value.bd, scale, RoundingMode.HALF_UP));
 	}
 
 	@Override
