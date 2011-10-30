@@ -1,6 +1,7 @@
 package bigdecimalchallenge.test;
 
 import java.lang.reflect.Constructor;
+import java.util.regex.Pattern;
 
 import bigdecimalchallenge.BigDecimal;
 
@@ -48,11 +49,24 @@ public class TestUtils<T> {
 	}
 	
 	/**
+	 * Normalizes a given number to an accepted number for BigDecimal implementations.
+	 * FIXME: Normalization must be implemented way more efficiently, or even better totally avoided in the first place.
+	 * 
+	 * @param number The number to normalize
+	 * @return The normalized number
+	 */
+	public static String normalize(String number) {
+		String result = toBigDecimalString(new java.math.BigDecimal(number));
+		return result;
+	}
+	
+	/**
 	 * Get the current instance of TestUtils
 	 */
 	public static TestUtils<BigDecimal<Object>> getInstance() {
 		return instance;
 	}
+	
 	/**
 	 * This method gives us the string equivalent of the java big decimal
 	 * @param decimal - decimal to convert to string
