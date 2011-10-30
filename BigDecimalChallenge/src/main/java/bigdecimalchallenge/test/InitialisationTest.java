@@ -23,11 +23,10 @@ public class InitialisationTest extends BigDecimalTest {
 	 * @param numberString The number as string to test
 	 */
 	private void assertCreation(String numberString) {
-		numberString = TestUtils.normalize(numberString);
 		logger.debug("Testing big decimal creation of number \"{}\"", numberString);
 		
 		BigDecimal<Object> bigDecimal = number(numberString);
-		assertEquals("Creating number from String " + numberString + " doesn't equal number.toString()", numberString, bigDecimal.toString());
+		assertEquals("Creating number from String " + numberString + " doesn't equal number.toString()", numberString.replaceAll("(\\.[0-9]*?)0+$", "$1").replaceAll("^-?0+\\.?0*$", "0").replaceAll("\\.$", ""), bigDecimal.toString());
 	}
 	
 	/**

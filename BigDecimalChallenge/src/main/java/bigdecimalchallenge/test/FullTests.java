@@ -6,13 +6,15 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import bigdecimalchallenge.test.object.ObjectTests;
 import bigdecimalchallenge.test.simplemath.SimpleMathTests;
+import bigdecimalchallenge.test.simplemathWithLargeNumbers.LargeNumbersMathTests;
 
 import junit.framework.TestSuite;
 @RunWith(Suite.class)
 @SuiteClasses({
 	InitialisationTest.class,
 	ObjectTests.class,
-	SimpleMathTests.class
+	SimpleMathTests.class,
+	LargeNumbersMathTests.class
 })
 
 public class FullTests extends TestSuite {
