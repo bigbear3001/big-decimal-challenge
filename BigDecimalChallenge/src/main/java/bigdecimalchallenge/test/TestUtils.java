@@ -1,7 +1,6 @@
 package bigdecimalchallenge.test;
 
 import java.lang.reflect.Constructor;
-import java.util.regex.Pattern;
 
 import bigdecimalchallenge.BigDecimal;
 
