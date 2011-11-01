@@ -263,7 +263,12 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		}
 		return new PerhabBigDecimal(newValue);
 	}
+	
 	public PerhabBigDecimal divide(PerhabBigDecimal value) {
+		//TODO check for periodical results
+		return divide(value, Integer.MAX_VALUE);
+	}
+	public PerhabBigDecimal divide(PerhabBigDecimal value, int scale) {
 		if(value.isZero()) {
 			throw new ArithmeticException("Division by zero");
 		}
@@ -279,13 +284,13 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 		divValue.data.decimalPlaces = 0;
 		divValue.data.negative = false;
 		
-		
+		boolean closeEnough = false;
 		int i = stack.data.data.size() - 1;
 		int currentPlace = 0;
 		PerhabBigDecimal buffer = new PerhabBigDecimal(new PerhabBigDecimalValue(new ArrayList<Integer>(), 0));
 		int guessCorrection = 0;
 		int guessPlaces = 1;
-		while(!stack.isZero()) {
+		while(!stack.isZero() && !closeEnough) {
 			LOGGER.trace("Stack: {}", stack);
 			PerhabBigDecimal firstPlaces = getFirstPlaces(divValue, guessPlaces);
 			if(guessCorrection == 0) {
@@ -310,6 +315,9 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 					PerhabBigDecimal corrector = PerhabBigDecimal.BASE_DECIMAL.power(new PerhabBigDecimal(placesOff * -1));
 					stack = stack.multiply(corrector);
 					newValue.decimalPlaces++;
+					if(newValue.decimalPlaces > scale) {
+						closeEnough = true;
+					}
 				}
 				if(!result.largerThan(stack)){
 					LOGGER.trace("           - {} ({} * {})", new Object[]{result, divValue, guess});
@@ -334,6 +342,20 @@ public class PerhabBigDecimal extends AbstractPerhabComparable<PerhabBigDecimal>
 				}
 			}
 			currentPlace++;
+			LOGGER.trace("Result: {}", newValue);
+		}
+		if(closeEnough) {
+			PerhabBigDecimal roundValue = new PerhabBigDecimal();
+			if(newValue.data.get(newValue.data.size() - 1) >= 5) {
+				for(int j = 0; j < newValue.data.size() - 2; j++) {
+					roundValue.data.data.add(0,0);
+				}
+				roundValue.data.decimalPlaces = newValue.data.size() - 1;
+				roundValue.data.data.add(0,1);
+			}
+			newValue.data.remove(newValue.data.size() - 1);
+			newValue.decimalPlaces--;
+			return new PerhabBigDecimal(newValue).add(roundValue);
 		}
 		return new PerhabBigDecimal(newValue);
 	}
