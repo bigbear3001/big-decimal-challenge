@@ -4,6 +4,12 @@
 	<groupId>com.perhab.bigdecimalchallenge</groupId>
 	<artifactId>bigdecimalchallenge-bigbear3001</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<parent>
+		<groupId>bigdecimalchallenge</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
 	<build>
 		<plugins>
 			<plugin>

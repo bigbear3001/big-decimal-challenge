@@ -5,6 +5,12 @@
 	<artifactId>bigdecimalchallenge</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>BigDecimalChallenge Interfaces and Tests</name>
+	<parent>
+		<groupId>bigdecimalchallenge</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
 	<build>
 		<plugins>
 			<plugin>
