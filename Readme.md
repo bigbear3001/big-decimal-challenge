@@ -1,1 +1,1 @@
-Demo Project to win a challenge us to build a fast replacement for BigDecimal
+Test Project to win a challenge us to build a fast replacement for BigDecimal
